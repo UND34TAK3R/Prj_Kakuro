@@ -75,7 +75,3 @@ All exceptions are handled gracefully for both offline and online scenarios to e
 ## 🤝 Contributing
 
 Justin Pescador, Derrick Mangari, Cong Huy Kieu
-
-## 📧 Contact
-
-*(Add contact information here)*
