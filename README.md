@@ -1,49 +1,81 @@
-Kakuro Game Description
+# 🧩 Kakuro Game
 
-Step into the world of Kakuro, the challenging logic-based number puzzle, now enhanced with modern features to make your gameplay engaging, social, and competitive. Whether you’re a casual player or a strategic thinker, this game offers everything you need to enjoy Kakuro online or offline.
+A modern take on the classic Kakuro logic-based number puzzle, enhanced with competitive, social, and customization features. Play casually offline or challenge others online while tracking your progress and improving your skills.
 
-Key Features
+## ✨ Features
 
-Timer & Personal Best: Track your speed and challenge yourself to beat your best time.
+### Core Gameplay
+- **Timer & Personal Best** - Track your completion time and challenge yourself to beat your best scores
+- **Multiple Difficulty Levels** - Choose from various difficulty levels to match your skill
+- **Gameplay Controls** - Reset game, pause/resume, restart, or quit at any time
+- **Guided Learning** - In-game help via a Question Mark button explaining Kakuro rules
 
-1v1 Multiplayer (Optional): Compete with friends or players worldwide via WebSocket for real-time matches.
+### Multiplayer & Competition
+- **1v1 Multiplayer** - Compete against friends or players worldwide using real-time WebSocket communication
+- **Rankings** - View leaderboards globally or among friends
+- **Friend Search & Social Hub** (Online only) - Search for players, view profiles, and add or remove friends
 
-Rankings: See how you stack up globally or among your friends.
+### User Experience
+- **User Accounts** - Login or sign up with email/password or Google Authentication, or play as a guest with offline features
+- **User Settings** - Customize light/dark mode, profile picture, background music, and more
+- **Security & Convenience** - Authentication, password reset, and secure account management
 
-Friend Search & Social Hub: Connect with friends, view profiles, and add or remove players from your list. (Online only, requires login)
+## 🛠 Tech Stack
 
-User Accounts: Login/Signup with email or Google Authentication, or play as a guest with offline features.
+- **Backend:** Java
+- **Database:** Firebase
+- **Frontend:** Angular
 
-User Settings: Customize your experience with light/dark mode, profile picture, background music, and more.
+## 🌐 Online vs Offline Mode
 
-Gameplay Options: Multiple difficulty levels, the ability to reset your game, pause/resume, or quit at any time.
+### Offline Mode
+- Guest play available
+- Local gameplay features
+- Personal timer and progress tracking
 
-Guided Learning: Use the Question Mark feature to understand the game rules and improve your strategy.
+### Online Mode
+Required for:
+- 1v1 multiplayer matches
+- Global and friends rankings
+- Social hub features (friend search, profiles, adding friends)
 
-Security & Convenience: Authentication, password reset, and account management ensure a safe and seamless experience.
+All exceptions are handled gracefully for both offline and online scenarios to ensure a smooth user experience.
 
-Tech Stack
+## 📋 Core Functionalities
 
-Backend: Java
+### Account Management
+- Create an account with email/password or Google Authentication
+- Login to existing accounts
+- Password reset functionality
+- Guest mode for offline play
+- Handles alternative flows and system exceptions gracefully
 
-Database: Firebase
+### Gameplay Features
+- Play Kakuro puzzles with intuitive controls
+- Reset current game
+- Pause and resume functionality
+- Restart puzzle
+- View in-game rules and tutorials
+- Online features (rankings, multiplayer) available when logged in
 
-Frontend: Angular or React
+### Settings Management
+- Customize user preferences:
+  - Light/Dark mode toggle
+  - Profile picture customization
+  - Background music settings
+- Reset settings to default
 
-Software Requirements & User Stories
+### Social Interaction (Online Only)
+- View player profiles
+- Add or remove friends
+- Access global leaderboards
+- View friends-only rankings
+- Search for other players
 
-Account Management: Users can create accounts, login, reset passwords, or play as guests. Alternative flows and exceptions are handled gracefully.
+## 🤝 Contributing
 
-Game Play: Users can play Kakuro with features to reset, pause, restart, and display rules. Online features like rankings and multiplayer are accessible when logged in.
+Justin Pescador, Derrick Mangari, Cong Huy Kieu
 
-Settings Management: Users can modify their settings, reset to defaults, and enjoy a personalized experience.
+## 📧 Contact
 
-Social Interaction: Online-only social hub allows users to interact with other players, view rankings, and manage friends.
-
-Offline/Online Notes
-
-Offline mode allows guest play and local game features.
-
-Online features such as 1v1 multiplayer, rankings, and social hub require an internet connection and login.
-
-Exceptions are clearly specified for both offline and online scenarios, ensuring smooth gameplay and account management.
+*(Add contact information here)*
