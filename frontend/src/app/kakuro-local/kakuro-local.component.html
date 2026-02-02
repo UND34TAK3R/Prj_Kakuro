@@ -1,0 +1,45 @@
+<div class="page">
+  <header class="header">
+    <h1>Kakuro – Local Game</h1>
+    <p>Guest mode - Single player - Offline</p>
+  </header>
+
+  <div class="game-container">
+    <div class="layout">
+      <!-- side bar information for time, difficulty, and grid -->
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Game Info</h3>
+          <p>⏱ Time: {{ time }}</p>
+          <p>🎯 Difficulty: {{ selectedDifficulty }}</p>
+          <p>📐 Grid: {{ selectedGridSize }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Settings</h3>
+
+          <label>Difficulty</label>
+          <select (change)="onDifficultyChange($any($event.target).value)">
+            <option *ngFor="let d of difficulties" [value]="d">{{ d }}</option>
+          </select>
+
+          <label>Grid Size</label>
+          <select (change)="onGridSizeChange($any($event.target).value)">
+            <option *ngFor="let g of gridSizes" [value]="g">{{ g }}</option>
+          </select>
+
+          <button>Start</button>
+          <button class="warn">Reset</button>
+          <button class="danger">Quit</button>
+        </div>
+      </aside>
+
+      <!-- game on the right -->
+      <main class="board">
+        <div class="placeholder">
+          Kakuro Grid Placeholder
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
