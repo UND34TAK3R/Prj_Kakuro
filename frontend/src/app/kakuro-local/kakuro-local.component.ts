@@ -29,29 +29,30 @@ export class KakuroLocalComponent {
   private _selectedGridSize = '4x4';
 
   //default row(because the default grid is 4x4 and that it always have 1 extra row/col)
-  rows = 5;
-  cols = 5;
+  rows = 0;
+  cols = 0;
 
   // Generate initial grid
   grid: any[][] = [];
   isGridReady = false;
 
-  ngOnInit() {
-    this.parseGridSize(this._selectedGridSize);
-    this.generateGrid();
+  constructor() {
+    this.onGridSizeChange(this._selectedGridSize);
     this.isGridReady = true;
+  }
+
+  // help keeping elements instead of destroying it all and recreating them (improve performance)
+  trackByIndex(index: number): number {
+    return index;
   }
 
   onGridSizeChange(value: string) {
-    this.selectedGridSize = value;
+    console.log('Setting grid size to:', value);
+    this._selectedGridSize = value;
+    this.parseGridSize(value);
     this.generateGrid();
   }
 
-  constructor() {
-    this.selectedGridSize = this._selectedGridSize;
-    this.generateGrid();
-    this.isGridReady = true;
-  }
 
   //get/set will automatically triggers parseGridSize() and generateGrid() whenever selectedGridSize changes
   get selectedDifficulty(): string {
@@ -68,7 +69,6 @@ export class KakuroLocalComponent {
   }
 
   set selectedGridSize(value: string) {
-    console.log('Setting grid size to:', value);
     this._selectedGridSize = value;
     this.parseGridSize(value);
     console.log('New grid:', this.rows - 1, 'x', this.cols - 1);

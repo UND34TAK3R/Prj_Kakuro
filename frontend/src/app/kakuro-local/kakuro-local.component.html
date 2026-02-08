@@ -24,7 +24,7 @@
           </select>
 
           <label>Grid Size</label>
-          <select [(ngModel)]="selectedGridSize"
+          <select [ngModel]="selectedGridSize"
                   (ngModelChange)="onGridSizeChange($event)">
             <option *ngFor="let g of gridSizes" [value]="g">{{ g }}</option>
           </select>
@@ -38,9 +38,10 @@
       <!-- game on the right -->
       <main class="board">
         <div class="grid-container">
-          <table class="kakuro-grid" *ngIf="isGridReady">
-            <tr *ngFor="let row of grid">
-              <td *ngFor="let cell of row"
+          <table class="kakuro-grid" *ngIf="grid.length > 0">
+            <tbody>
+            <tr *ngFor="let row of grid; let i = index; trackBy: trackByIndex">
+              <td *ngFor="let cell of row; let j = index; trackBy: trackByIndex"
                   [class.black-cell]="cell.isBlack"
                   class="cell">
                 <input
@@ -51,6 +52,7 @@
                   class="cell-input">
               </td>
             </tr>
+            </tbody>
           </table>
         </div>
       </main>
