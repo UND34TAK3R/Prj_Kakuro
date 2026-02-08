@@ -19,12 +19,13 @@
           <h3>Settings</h3>
 
           <label>Difficulty</label>
-          <select (change)="onDifficultyChange($any($event.target).value)">
+          <select [(ngModel)]="selectedDifficulty">
             <option *ngFor="let d of difficulties" [value]="d">{{ d }}</option>
           </select>
 
           <label>Grid Size</label>
-          <select (change)="onGridSizeChange($any($event.target).value)">
+          <select [(ngModel)]="selectedGridSize"
+                  (ngModelChange)="onGridSizeChange($event)">
             <option *ngFor="let g of gridSizes" [value]="g">{{ g }}</option>
           </select>
 
@@ -36,8 +37,21 @@
 
       <!-- game on the right -->
       <main class="board">
-        <div class="placeholder">
-          Kakuro Grid Placeholder
+        <div class="grid-container">
+          <table class="kakuro-grid" *ngIf="isGridReady">
+            <tr *ngFor="let row of grid">
+              <td *ngFor="let cell of row"
+                  [class.black-cell]="cell.isBlack"
+                  class="cell">
+                <input
+                  *ngIf="!cell.isBlack"
+                  type="text"
+                  maxlength="1"
+                  [(ngModel)]="cell.value"
+                  class="cell-input">
+              </td>
+            </tr>
+          </table>
         </div>
       </main>
     </div>
