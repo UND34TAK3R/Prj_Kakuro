@@ -6,38 +6,96 @@
 
   <div class="game-container">
     <div class="layout">
-      <!-- side bar information for time, difficulty, and grid -->
+      <!-- Sidebar information for time, difficulty, and grid -->
       <aside class="sidebar">
         <div class="card">
           <h3>Game Info</h3>
           <p>⏱ Time: {{ time }}</p>
           <p>🎯 Difficulty: {{ selectedDifficulty }}</p>
-          <p>📐 Grid: {{ selectedGridSize }}</p>
+          <p>📏 Grid: {{ selectedGridSize }}</p>
+          <p *ngIf="isGameComplete" class="success">✅ Puzzle Complete!</p>
         </div>
 
         <div class="card">
           <h3>Settings</h3>
 
           <label>Difficulty</label>
-          <select (change)="onDifficultyChange($any($event.target).value)">
+          <select [(ngModel)]="selectedDifficulty">
             <option *ngFor="let d of difficulties" [value]="d">{{ d }}</option>
           </select>
 
           <label>Grid Size</label>
-          <select (change)="onGridSizeChange($any($event.target).value)">
+          <select [ngModel]="selectedGridSize"
+                  (ngModelChange)="onGridSizeChange($event)">
             <option *ngFor="let g of gridSizes" [value]="g">{{ g }}</option>
           </select>
 
-          <button>Start</button>
-          <button class="warn">Reset</button>
-          <button class="danger">Quit</button>
+          <button (click)="startGame()">Start New Game</button>
+          <button class="warn" (click)="resetGame()">Reset</button>
+          <button class="debug" (click)="showSolution()">Show Solution</button>
+        </div>
+
+        <div class="card">
+          <h3>Instructions</h3>
+          <ul>
+            <li>Fill each white cell with a number 1-9</li>
+            <li>Numbers in each sector must add up to the clue</li>
+            <li>No duplicate numbers in the same sector</li>
+            <li>Diagonal line shows clues: top-right = across, bottom-left = down</li>
+          </ul>
         </div>
       </aside>
 
-      <!-- game on the right -->
+      <!-- Game board on the right -->
       <main class="board">
-        <div class="placeholder">
-          Kakuro Grid Placeholder
+        <div class="grid-container">
+          <!-- Welcome message when no game started -->
+          <div *ngIf="!isGridReady && !isLoading" class="welcome-message">
+            <h2>Welcome to Kakuro!</h2>
+            <p>Click "Start New Game" to begin</p>
+          </div>
+
+          <!-- Loading indicator -->
+          <div *ngIf="isLoading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Generating puzzle...</p>
+          </div>
+
+          <table class="kakuro-grid" *ngIf="grid.length > 0 && !isLoading && isGridReady">
+            <tbody>
+            <tr *ngFor="let row of grid; let i = index; trackBy: trackByIndex">
+              <td *ngFor="let cell of row; let j = index; trackBy: trackByIndex"
+                  [class.black-cell]="cell.isBlack"
+                  [class.clue-cell]="cell.isClue"
+                  [class.correct-cell]="!cell.isBlack && cell.value !== undefined && isCellCorrect(cell)"
+                  [class.incorrect-cell]="!cell.isBlack && cell.value !== undefined && !isCellCorrect(cell)"
+                  class="cell">
+
+                <!-- Clue cell with diagonal line -->
+                <div *ngIf="cell.isBlack && cell.isClue" class="clue-container">
+                  <div class="clue-diagonal"></div>
+                  <span class="clue-down" *ngIf="cell.clueDown">{{ cell.clueDown }}</span>
+                  <span class="clue-across" *ngIf="cell.clueAcross">{{ cell.clueAcross }}</span>
+                </div>
+
+                <!-- Plain black cell -->
+                <div *ngIf="cell.isBlack && !cell.isClue" class="black-fill"></div>
+
+                <!-- Playable cell -->
+                <input
+                  *ngIf="!cell.isBlack"
+                  type="number"
+                  min="1"
+                  max="9"
+                  [(ngModel)]="cell.value"
+                  (ngModelChange)="onCellChange(cell)"
+                  [disabled]="isGameComplete || (cell.isFixed ?? false)"
+                  class="cell-input"
+                  [class.fixed-cell]="cell.isFixed">
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
