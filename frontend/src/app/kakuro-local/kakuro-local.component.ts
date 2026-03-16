@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 // Revision history:
 //
-// DEVELOPER DATE COMMENTS
+// DEVELOPER          DATE                            COMMENTS
 // Kieu Cong Huy    2026-01-31  Created Kakuro local game components with difficulty and grid selection
 // Kieu Cong Huy    2026-02-07  generate grid based on size ex:4x4 (not auto generated random black space yet)
 // Kieu Cong Huy    2026-02-07  Added getter/setter for selectedGridSize to auto-regenerate grid on change
@@ -46,7 +46,7 @@ export class KakuroLocalComponent implements OnInit, OnDestroy {
   private startTime?: Date;
 
   difficulties = ['Easy', 'Medium', 'Hard'];
-  gridSizes = ['4x4', '6x6', '8x8', '9x11', '9x17'];
+  gridSizes = ['4x4', '6x6', '8x8'];
 
   private _selectedDifficulty = 'Easy';
   private _selectedGridSize = '4x4';

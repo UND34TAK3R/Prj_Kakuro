@@ -1,0 +1,15 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+ 
+.app-layout.with-sidebar .main-content {
+  margin-left: 220px;
+  flex: 1;
+}
+ 
+.main-content {
+  flex: 1;
+  width: 100%;
+}
+ 

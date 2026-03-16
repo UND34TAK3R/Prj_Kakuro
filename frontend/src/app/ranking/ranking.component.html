@@ -1,0 +1,86 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ranking.component.css">
+
+<div class="page">
+  <div class="leaderboard-container">
+
+    <div class="auth-header">
+      <h1 class="auth-title">Leaderboard</h1>
+      <p class="auth-subtitle">Top players across all grid sizes</p>
+    </div>
+
+    <div class="scope-tabs">
+      <button
+        class="scope-tab"
+        [class.active]="scope === 'global'"
+        (click)="scope = 'global'"
+      >
+        Global
+      </button>
+      <button
+        class="scope-tab"
+        [class.active]="scope === 'friends'"
+        (click)="scope = 'friends'"
+      >
+        Friends
+      </button>
+    </div>
+
+    <div class="grid-tabs">
+      <button
+        class="grid-tab"
+        [class.active]="grid === '4x4'"
+        (click)="grid = '4x4'"
+      >
+        4 × 4
+      </button>
+      <button
+        class="grid-tab"
+        [class.active]="grid === '6x6'"
+        (click)="grid = '6x6'"
+      >
+        6 × 6
+      </button>
+      <button
+        class="grid-tab"
+        [class.active]="grid === '8x8'"
+        (click)="grid = '8x8'"
+      >
+        8 × 8
+      </button>
+    </div>
+
+    <div class="game-container">
+
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-name">Player</th>
+            <th class="col-time">Best Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of getRows(); let i = index" class="leaderboard-row">
+            <td class="col-rank">
+              <span class="rank-badge" [ngClass]="getRankClass(i + 1)">
+                {{ i + 1 }}
+              </span>
+            </td>
+            <td class="col-name">
+              <span class="player-name empty">—</span>
+            </td>
+            <td class="col-time">
+              <span class="time-value">-- : --</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="empty-notice" *ngIf="scope === 'friends'">
+        Add friends to see how you compare!
+      </p>
+
+    </div>
+  </div>
+</div>

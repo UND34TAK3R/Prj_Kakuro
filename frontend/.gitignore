@@ -45,3 +45,4 @@ Thumbs.db
 # ========================
 # Firebase secrets
 # ========================
+./src/environments/environment

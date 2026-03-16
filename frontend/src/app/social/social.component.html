@@ -1,0 +1,120 @@
+<div class="page social-page">
+  <div class="hub-container">
+
+    <!-- Header -->
+    <div class="auth-header">
+      <h1 class="auth-title">Social Hub</h1>
+      <p class="auth-subtitle">Manage your friends and connections</p>
+    </div>
+
+    <!-- Friends Grid: Online + Offline + Requests -->
+    <div class="hub-grid">
+
+      <!-- Online Friends -->
+      <div class="game-container friends-card">
+        <div class="card-label">
+          <span class="status-dot online"></span>
+          Online
+          <span class="count-pill green">{{ onlineFriends.length }}</span>
+        </div>
+        <hr class="divider" />
+        <ul class="friends-list">
+          <li class="friend-row" *ngFor="let friend of onlineFriends">
+            <span class="status-dot online"></span>
+            <span class="friend-username">{{ friend.username }}</span>
+          </li>
+          <li class="empty-state" *ngIf="onlineFriends.length === 0">No friends online right now.</li>
+        </ul>
+      </div>
+
+      <!-- Offline Friends -->
+      <div class="game-container friends-card">
+        <div class="card-label">
+          <span class="status-dot offline"></span>
+          Offline
+          <span class="count-pill gray">{{ offlineFriends.length }}</span>
+        </div>
+        <hr class="divider" />
+        <ul class="friends-list">
+          <li class="friend-row dimmed" *ngFor="let friend of offlineFriends">
+            <span class="status-dot offline"></span>
+            <span class="friend-username">{{ friend.username }}</span>
+          </li>
+          <li class="empty-state" *ngIf="offlineFriends.length === 0">All friends are online!</li>
+        </ul>
+      </div>
+
+      <!-- Friend Requests -->
+      <div class="game-container friends-card">
+        <div class="card-label">
+          Friend Requests
+          <span class="count-pill blue" *ngIf="pendingRequests.length > 0">{{ pendingRequests.length }}</span>
+        </div>
+        <hr class="divider" />
+        <ul class="friends-list">
+          <li class="friend-row" *ngFor="let req of pendingRequests">
+            <span class="friend-username">{{ req.username }}</span>
+            <div class="req-actions">
+              <button class="req-btn accept" (click)="acceptRequest(req)" title="Accept">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="req-btn decline" (click)="declineRequest(req)" title="Decline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </li>
+          <li class="empty-state" *ngIf="pendingRequests.length === 0">No pending requests.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Search / Find People -->
+    <div class="game-container search-card">
+      <div class="card-label">Find People</div>
+      <p class="card-sub">Search by username to send a friend request</p>
+      <hr class="divider" />
+
+      <div class="field-group">
+        <div class="search-wrap">
+          <span class="search-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input
+            class="field-input search-field"
+            type="text"
+            placeholder="Enter a username…"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+          <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">✕</button>
+        </div>
+      </div>
+
+      <div *ngIf="searchQuery">
+        <div class="search-loading" *ngIf="searchLoading">
+          <span class="spinner"></span> Searching…
+        </div>
+        <ul class="friends-list" *ngIf="!searchLoading && searchResults.length > 0">
+          <li class="friend-row result-row" *ngFor="let user of searchResults">
+            <span class="status-dot" [class.online]="user.isOnline" [class.offline]="!user.isOnline"></span>
+            <span class="friend-username">{{ user.username }}</span>
+            <button
+              class="add-btn"
+              [class.sent]="user.requestSent"
+              [disabled]="user.requestSent"
+              (click)="sendRequest(user)"
+            >
+              <span *ngIf="!user.requestSent">+ Add</span>
+              <span *ngIf="user.requestSent">✓ Sent</span>
+            </button>
+          </li>
+        </ul>
+        <p class="empty-state" *ngIf="!searchLoading && searchResults.length === 0">
+          No users found for "<strong>{{ searchQuery }}</strong>".
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

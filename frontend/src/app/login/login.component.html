@@ -1,0 +1,66 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="login.component.css">
+
+<div class="page">
+  <div class="auth-container">
+
+    <div class="auth-header">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Sign in to your account to continue</p>
+    </div>
+
+    <div class="game-container">
+      <form [formGroup]="form" (ngSubmit)="login()" novalidate>
+
+        <div class="field-group">
+          <label class="field-label" for="email">Email</label>
+          <input
+            class="field-input"
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="you@example.com"
+          />
+          <span class="field-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+            Enter a valid email.
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="password">Password</label>
+          <input
+            class="field-input"
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="••••••••"
+          />
+          <span class="field-error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+            Password is required.
+          </span>
+        </div>
+
+        <p class="field-error global-error" *ngIf="error">{{ error }}</p>
+
+        <button
+          class="auth-btn"
+          type="submit"
+        >
+          Sign in
+        </button>
+
+      </form>
+
+      <hr class="divider">
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a routerLink="/register">Sign up</a>
+      </p>
+      <p class="auth-footer">
+        Or continue as
+        <a routerLink="/localGame">Guest</a>
+      </p>
+    </div>
+  </div>
+</div>

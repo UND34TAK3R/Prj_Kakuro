@@ -1,1 +1,6 @@
-<app-kakuro-local></app-kakuro-local>
+<div class="app-layout" [class.with-sidebar]="showSidebar()">
+  <app-sidebar *ngIf="showSidebar()"></app-sidebar>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

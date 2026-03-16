@@ -1,0 +1,92 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="auth-container">
+
+    <div class="auth-header">
+      <h1 class="auth-title">Create an account</h1>
+      <p class="auth-subtitle">Fill in the details below to get started</p>
+    </div>
+
+    <div class="game-container">
+      <form [formGroup]="form" (ngSubmit)="signUp()" novalidate>
+
+        <div class="field-group">
+          <label class="field-label" for="username">Username</label>
+          <input
+            class="field-input"
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="yourname"
+          />
+          <span class="field-error" *ngIf="form.get('username')?.invalid && form.get('username')?.touched">
+            Username must be at least 3 characters.
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="email">Email</label>
+          <input
+            class="field-input"
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="you@example.com"
+          />
+          <span class="field-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+            Enter a valid email.
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="password">Password</label>
+          <input
+            class="field-input"
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="••••••••"
+          />
+          <span class="field-error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+            Password must be at least 6 characters.
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="confirmPassword">Confirm Password</label>
+          <input
+            class="field-input"
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="••••••••"
+          />
+          <span class="field-error" *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">
+            Please confirm your password.
+          </span>
+          <span class="field-error" *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched && form.get('confirmPassword')?.valid">
+            Passwords do not match.
+          </span>
+        </div>
+
+        <p class="field-error global-error" *ngIf="error">{{ error }}</p>
+
+        <button
+          class="auth-btn"
+          type="submit"
+        >
+          Create account
+        </button>
+
+      </form>
+
+      <hr class="divider">
+
+      <p class="auth-footer">
+        Already have an account?
+        <a routerLink="/login">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>

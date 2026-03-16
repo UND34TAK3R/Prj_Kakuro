@@ -1,0 +1,228 @@
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem 4rem;
+  background-color: #fff;
+}
+
+.leaderboard-container {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Header (reused from auth pages) ── */
+.auth-header {
+  text-align: center;
+}
+
+.auth-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem;
+}
+
+.auth-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #6b6b6b;
+  margin: 0;
+}
+
+/* ── Scope tabs (Global / Friends) ── */
+.scope-tabs {
+  display: flex;
+  background: #fff;
+  border: 1px solid #e0ddd6;
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.scope-tab {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #6b6b6b;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.scope-tab.active {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.scope-tab:not(.active):hover {
+  background: #f0ede6;
+  color: #1a1a1a;
+}
+
+/* ── Grid size tabs (4x4 / 6x6 / 8x8) ── */
+.grid-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.grid-tab {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e0ddd6;
+  border-radius: 8px;
+  background: #fff;
+  color: #6b6b6b;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+.grid-tab.active {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  background: #fff;
+  font-weight: 600;
+}
+
+.grid-tab:not(.active):hover {
+  border-color: #a8a49e;
+  color: #1a1a1a;
+}
+
+/* ── Card container (reused .game-container pattern) ── */
+.game-container {
+  background: #fff;
+  border: 1px solid #e0ddd6;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Table ── */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.leaderboard-table thead tr {
+  border-bottom: 1px solid #e0ddd6;
+}
+
+.leaderboard-table th {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9a9690;
+  padding: 0 0 0.75rem;
+  text-align: left;
+}
+
+.col-rank  { width: 52px; }
+.col-time  { width: 100px; text-align: right; }
+
+.leaderboard-table th.col-time,
+.leaderboard-table td.col-time {
+  text-align: right;
+}
+
+.leaderboard-row {
+  border-bottom: 1px solid #f0ede6;
+  transition: background 0.14s;
+}
+
+.leaderboard-row:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-row:hover {
+  background: #faf9f6;
+}
+
+.leaderboard-row td {
+  padding: 0.85rem 0;
+  vertical-align: middle;
+}
+
+/* ── Rank badge ── */
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #f0ede6;
+  color: #6b6b6b;
+}
+
+.rank-badge.rank-1 {
+  background: #fdf3dc;
+  color: #a07820;
+}
+
+.rank-badge.rank-2 {
+  background: #f0f0f0;
+  color: #606060;
+}
+
+.rank-badge.rank-3 {
+  background: #fde9e0;
+  color: #9a4a28;
+}
+
+/* ── Empty state values ── */
+.player-name.empty {
+  color: #c0bdb6;
+  font-size: 0.95rem;
+}
+
+.time-value {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: #c0bdb6;
+  letter-spacing: 0.04em;
+}
+
+/* ── Friends empty notice ── */
+.empty-notice {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #9a9690;
+  text-align: center;
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0ede6;
+}
+
+/* ── Back link ── */
+.back-link {
+  text-align: center;
+}
+
+.back-link a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  color: #6b6b6b;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.back-link a:hover {
+  color: #1a1a1a;
+}

@@ -1,14 +1,47 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import {KakuroLocalComponent} from './kakuro-local/kakuro-local.component';
-import {CommonModule} from '@angular/common';
+import {CommonModule, } from '@angular/common';
+import {SidebarComponent} from './sidebar/sidebar.component';
+import { FirebaseService } from './services/firebase.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, KakuroLocalComponent],
+  imports: [RouterOutlet, CommonModule, SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'frontend';
+export class AppComponent implements OnInit{
+  title = 'Kakuro Game';
+ 
+  // Routes where sidebar should not appear
+  private noSidebarRoutes = ['/login', '/register', '', '/localGame'];
+  private firebaseService = inject(FirebaseService)
+ 
+  constructor(private router: Router) {}
+ 
+  showSidebar(): boolean {
+    const currentUrl = this.router.url;
+    return !this.noSidebarRoutes.includes(currentUrl);
+  }
+
+  private currentUid: string | null = null;
+
+  ngOnInit(): void {
+    this.firebaseService.currentUser$.subscribe(user => {
+      if (user) {
+        this.currentUid = user.uid;
+        this.firebaseService.setUserOnline(user.uid);
+      }
+    });
+  }
+
+  // Fires when the user closes the tab or navigates away
+  @HostListener('window:beforeunload')
+  onBeforeUnload(): void {
+    if (this.currentUid) {
+      this.firebaseService.setUserOffline(this.currentUid);
+    }
+  }
+
 }
