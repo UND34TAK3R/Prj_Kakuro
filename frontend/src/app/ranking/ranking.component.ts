@@ -99,7 +99,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 
     const usersSub = this.firebaseService.getUsers().subscribe({
       next: (users) => {
-
         let filtered = users;
         if (this.scope === 'friends') {
           filtered = users.filter(u => this.friendsMap.has(u.id));

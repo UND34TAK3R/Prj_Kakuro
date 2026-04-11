@@ -5,6 +5,7 @@ import { KakuroLocalComponent } from './kakuro-local/kakuro-local.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { SocialHubComponent } from './social/social.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { AccountPreferencesComponent } from './account-preferences/account-preferences.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,5 +14,6 @@ export const routes: Routes = [
     { path: 'homepage', component: HomepageComponent },
     { path: 'social', component: SocialHubComponent },
     { path: 'rankings', component: RankingComponent },
-    { path: 'localGame', component: KakuroLocalComponent }
+    { path: 'localGame', component: KakuroLocalComponent },
+    { path: 'preferences', component: AccountPreferencesComponent }
 ];

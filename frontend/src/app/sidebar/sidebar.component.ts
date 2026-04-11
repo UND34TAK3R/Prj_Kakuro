@@ -14,7 +14,7 @@ import { FirebaseService } from '../services/firebase.service';
 // Revision history:
 //
 // DEVELOPER          DATE                            COMMENTS
-// Derrick Mangari 2026-03-13       Created the Sidebar Component, the template and styles 
+// Derrick Mangari 2026-03-13       Created the Sidebar Component, the template and styles
 export class SidebarComponent {
 
   private firebase = inject(FirebaseService);
@@ -38,7 +38,9 @@ export class SidebarComponent {
       {
         label: 'Leaderboard',
         route: '/rankings',
-      }
-    ];
+      },
+      {label: '️Settings',
+        route: '/preferences'}
+  ];
 }
 

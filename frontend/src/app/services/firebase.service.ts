@@ -3,7 +3,7 @@ import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc,
 import { Auth, signInWithEmailAndPassword, signOut, user, createUserWithEmailAndPassword, UserCredential, getAuth } from '@angular/fire/auth';
 import { Observable, switchMap, of } from 'rxjs';
 import { getDatabase, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "firebase/database";
-
+import { UserPreferences } from '../account-preferences/account-preferences.component';
 // Revision history:
 //
 // DEVELOPER          DATE                            COMMENTS
@@ -33,15 +33,15 @@ export class FirebaseService {
             }
         });
         // Set user online status in Realtime Database
-        await this.setUserOnline(credential.user.uid); 
+        await this.setUserOnline(credential.user.uid);
         return credential;
 }
 
     async login(email: string, password: string): Promise<import('@angular/fire/auth').UserCredential> {
         const credentials = await signInWithEmailAndPassword(this.auth, email, password);
         // Set user online status in Realtime Database
-        await this.setUserOnline(credentials.user.uid); 
-        return credentials;      
+        await this.setUserOnline(credentials.user.uid);
+        return credentials;
     }
 
     async logout(): Promise<void> {
@@ -106,7 +106,7 @@ export class FirebaseService {
     // Friend Management
         async addFriend(userId: string, friendId: string): Promise<void> {
         const friendRef = doc(this.firestore, `users/${userId}/friends/${friendId}`);
-        // Add friend to user friend list 
+        // Add friend to user friend list
         await setDoc(friendRef, { friendId });
     }
 
@@ -148,7 +148,7 @@ export class FirebaseService {
 
 
 
-    // Real-time Database Methods 
+    // Real-time Database Methods
 
     // User Status (Online/Offline) Tracking
 
@@ -241,4 +241,21 @@ export class FirebaseService {
             [`pb.${cube}`]: time
         });
     }
+
+  //user preference
+  async saveUserPreferences(uid: string, preferences: UserPreferences): Promise<void> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    await updateDoc(userRef, {
+      preferences: {
+        theme: preferences.theme,
+        backgroundMusic: preferences.backgroundMusic,
+        profilePicture: preferences.profilePicture
+      }
+    });
+  }
+
+  getUserPreferences(uid: string): Observable<any> {
+    const ref = doc(this.firestore, `users/${uid}`);
+    return docData(ref, { idField: 'id' });
+  }
 }
