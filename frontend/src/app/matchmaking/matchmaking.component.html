@@ -1,0 +1,35 @@
+<div class = "mm-page">
+  <div class = "mm-card">
+    <h2 class = "mm-title"> Finding Opponent </h2>
+    <div class = "mm-meta">
+      <span class = "badge"> {{ gameMode }}</span>
+      <span class = "badge"> {{ gridSize }}</span>
+    </div>
+
+    <!-- Initial search -->
+    <div *ngIf="searching" class = "mm-status">
+      <div class = "spinner"> </div>
+        <p> Searching for available opponents.. </p>
+    </div>
+
+    <!-- Matchmaking in process -->
+    <div *ngIf="matchmakingInProgress && !opponentFound" class = "mm-status">
+      <div class = "spinner"> </div>
+      <p> You are currently in queue. Searching for an opponent.. </p>
+      <p class = "mm-hint"> Upon finding an opponent, your page will be updated automatically. </p>
+    </div>
+
+    <!-- Opponent found -->
+    <div *ngIf="opponentFound" class = "mm-status success">
+      <p class = "match-found"> Match found! Starting game.. </p>
+    </div>
+
+    <!-- Display errors, if any -->
+    <p class = "error-msg" *ngIf="error"> {{ error }} </p>
+
+    <!-- Cancel matchmaking button -->
+    <button *ngIf="matchmakingInProgress && !opponentFound"
+            class = "cancel-btn"
+            (click) = "cancelSearch()"> Stop Queue </button>
+  </div>
+</div>
