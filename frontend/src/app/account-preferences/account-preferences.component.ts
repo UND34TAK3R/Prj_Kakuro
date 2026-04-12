@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FirebaseService } from '../services/firebase.service';
 import { Subscription } from 'rxjs';
+import { ThemeService } from '../services/theme.service';
+import {MusicService} from '../services/music.service';
 
 export interface UserPreferences {
-  theme:            string;
-  backgroundMusic:  string;
-  profilePicture:   string;
+  theme: string;
+  backgroundMusic: string;
+  profilePicture: string;
 }
 
 @Component({
@@ -19,11 +21,14 @@ export interface UserPreferences {
 })
 export class AccountPreferencesComponent implements OnInit, OnDestroy {
   private firebaseService = inject(FirebaseService);
+  private themeService = inject(ThemeService);
+  private musicService = inject(MusicService);
 
   currentUserId: string  = '';
   isSaving: boolean = false;
   saveSuccess: boolean = false;
   error: string  = '';
+  volume: number = 0.4;
 
   // "up : UserPreferences" from all 3 sequence diagrams
   userPreferences: UserPreferences = {
@@ -75,7 +80,7 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         if (!data) return;
         this.userPreferences = {
-          theme:           data.preferences?.theme           ?? 'light',
+          theme: data.preferences?.theme ?? 'light',
           backgroundMusic: data.preferences?.backgroundMusic ?? 'none',
           profilePicture:  data.preferences?.profilePicture  ?? ''
         };
@@ -85,11 +90,13 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
 
   async selectTheme(theme: string): Promise<void> {
     this.userPreferences.theme = theme;
+    this.themeService.applyTheme(theme);
     await this.saveUserPreferences();
   }
 
   async selectBackgroundMusic(music: string): Promise<void> {
     this.userPreferences.backgroundMusic = music;
+    this.musicService.playMusic(music);
     await this.saveUserPreferences();
   }
 
@@ -118,5 +125,11 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
   private showSuccess(): void {
     this.saveSuccess = true;
     setTimeout(() => this.saveSuccess = false, 2000);
+  }
+
+  onVolumeChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.volume = parseFloat(input.value);
+    this.musicService.setVolume(this.volume);
   }
 }
