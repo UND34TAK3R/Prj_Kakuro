@@ -65,7 +65,7 @@
           <span class="field-error" *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">
             Please confirm your password.
           </span>
-          <span class="field-error" *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched && form.get('confirmPassword')?.valid">
+          <span class="field-error" *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched">
             Passwords do not match.
           </span>
         </div>

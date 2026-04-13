@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
-import {clearInterval} from 'node:timers';
 
 @Component({
   selector: "app-matchmaking",
