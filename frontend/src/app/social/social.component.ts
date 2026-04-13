@@ -205,7 +205,7 @@ export class SocialHubComponent implements OnInit, OnDestroy {
     }
   }
 
-  // isd Refuse Invitation
+  // isd Refuse Invitation (MISMATCH FROM DIAGRAM, BUT INPUT REQUIRED OR ELSE IT DOESN'T WORK)
   async refuseDuel(invite: DuelInvite): Promise<void> {
     invite.refusing = true;
     try {

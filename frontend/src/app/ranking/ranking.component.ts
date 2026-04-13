@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 //vision history:
 //
 // DEVELOPER          DATE                            COMMENTS
-// Derrick Mangari 2026-03-15       Created the Leaderboard Component. Displays empty ranked rows
+// Cong Huy Kieu    2026-03-15       Created the Leaderboard Component. Displays empty ranked rows
 //                                  for 4x4, 6x6, and 8x8 Kakuro grids with Global / Friends scope
 //                                  tabs. Ready to be wired to a Firebase leaderboard collection.
 

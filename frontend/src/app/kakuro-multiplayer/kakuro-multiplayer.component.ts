@@ -16,10 +16,11 @@ import {
 // Revision history:
 //
 // DEVELOPER          DATE                            COMMENTS
-// Justin P.  2026-04-12   Created KakuroMultiplayerComponent: real-time two-player Kakuro game
+// Justin P.        2026-04-12   Created KakuroMultiplayerComponent: real-time two-player Kakuro game
 //                               using an existing GameSession created by MatchmakingComponent or
 //                               SocialComponent (duel invite). Implements Pause, Resume, Quit Game
 //                               (isd Pause Game, isd Resume Game, isd Quit Game diagrams).
+// Justin P.        2026-04-12   Fixed inconsistencies with file name changes
 
 type CellType = 'empty' | 'clue' | 'playable';
 
@@ -45,7 +46,7 @@ interface Cell {
   styleUrl: './kakuro-multiplayer.component.css'
 })
 export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
-  private firebase= inject(FirebaseService);
+  private firebase= inject(FirebaseService); // firebaseService
   private firestore = inject(Firestore);
   router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -60,7 +61,7 @@ export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
 
   // ─── Game state ──────────────────────────────────────────────
   sessionState: 'active' | 'paused' | 'finished' = 'active';
-  grid: Cell[][] = [];
+  grid: Cell[][] = []; // matches exact format of KakuroGrid = Cell[] [] + number;
   isGridReady = false;
   isLoading = true;
   isGameComplete = false;
