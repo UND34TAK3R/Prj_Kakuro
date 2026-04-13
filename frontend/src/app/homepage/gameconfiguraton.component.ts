@@ -13,11 +13,11 @@ interface Friend {
 type InviteStatus = 'idle' | 'sending' | 'not-received' | 'received' | 'ready' | 'refused' | 'error';
 
 @Component({
-  selector: 'app-homepage',
+  selector: 'app-gameconfiguration',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.css'
+  templateUrl: './gameconfiguration.component.html',
+  styleUrl: './gameconfiguration.component.css'
 })
 
 
@@ -28,8 +28,9 @@ type InviteStatus = 'idle' | 'sending' | 'not-received' | 'received' | 'ready' |
 // Derrick Mangari 2026-03-14       Created the Homepage Component
 // Justin P.       2026-04-12       Added game to Homepage Component
 // Justin P.       2026-04-12       Added 1v1 friends
+// Justin P.       2026-04-12       Changed homepage => GameConfiguration
 
-export class HomepageComponent {
+export class GameConfigurationComponent {
   private router = inject(Router);
   private firebase = inject(FirebaseService);
   private database = inject(Database);

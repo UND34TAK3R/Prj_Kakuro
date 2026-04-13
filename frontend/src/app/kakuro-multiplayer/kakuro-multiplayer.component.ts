@@ -363,10 +363,10 @@ export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
     try {
       await this.firebase.quitGame(this.sessionId, this.currentUid, true);
       this.cleanup();
-      this.router.navigate(['/homepage']);
+      this.router.navigate(['/gameConfig']);
     } catch (err) {
       console.error('quitGame error:', err);
-      this.router.navigate(['/homepage']);
+      this.router.navigate(['/gameConfig']);
     }
   }
 
