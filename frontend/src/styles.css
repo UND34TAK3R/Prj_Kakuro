@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-primary:    #f3f4f6;
+  --bg-secondary:  #ffffff;
+  --bg-card:       #f9fafb;
+  --text-primary:  #1f2937;
+  --text-secondary:#6b7280;
+  --border-color:  #e5e7eb;
+  --accent:        #3b82f6;
+}
+
+/* Dark theme */
+:root[data-theme="dark"] {
+  --bg-primary:    #111827;
+  --bg-secondary:  #1f2937;
+  --bg-card:       #374151;
+  --text-primary:  #f9fafb;
+  --text-secondary:#9ca3af;
+  --border-color:  #4b5563;
+  --accent:        #60a5fa;
+}
+
+/* Ocean theme */
+:root[data-theme="ocean"] {
+  --bg-primary:    #0c1a2e;
+  --bg-secondary:  #0f2744;
+  --bg-card:       #163354;
+  --text-primary:  #e0f2fe;
+  --text-secondary:#7dd3fc;
+  --border-color:  #1e4976;
+  --accent:        #38bdf8;
+}
+
+/* Forest theme */
+:root[data-theme="forest"] {
+  --bg-primary:    #0f1f0f;
+  --bg-secondary:  #1a2e1a;
+  --bg-card:       #233823;
+  --text-primary:  #d1fae5;
+  --text-secondary:#6ee7b7;
+  --border-color:  #2d4a2d;
+  --accent:        #34d399;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color:            var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}

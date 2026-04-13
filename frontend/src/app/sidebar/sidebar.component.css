@@ -6,7 +6,7 @@
   left: 0;
   height: 100vh;
   width: 220px;
-  background: #1f2937;
+  background: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -14,19 +14,19 @@
   box-shadow: 4px 0 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Brand*/
+/* Brand */
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 28px 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .brand-icon {
   width: 36px;
   height: 36px;
-  background: #3b82f6;
+  background: var(--accent);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -42,11 +42,11 @@
   font-family: 'Playfair Display', serif;
   font-size: 18px;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   letter-spacing: 0.01em;
 }
 
-/*  Nav */
+/* Nav */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
   padding: 11px 12px;
   border-radius: 10px;
   text-decoration: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-family: 'DM Sans', Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
@@ -71,12 +71,12 @@
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: #e5e7eb;
+  background: var(--bg-card);
+  color: var(--text-primary);
 }
 
 .nav-item.active {
-  background: #3b82f6;
+  background: var(--accent);
   color: white;
 }
 
@@ -96,7 +96,7 @@
 /* Footer / Logout */
 .sidebar-footer {
   padding: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-color);
 }
 
 .logout-btn {
@@ -108,7 +108,7 @@
   border-radius: 10px;
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-family: 'DM Sans', Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;

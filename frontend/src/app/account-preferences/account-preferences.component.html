@@ -1,0 +1,85 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="preferences-container">
+
+    <div class="auth-header">
+      <h1 class="auth-title">Account Preferences</h1>
+      <p class="auth-subtitle">Customize your Kakuro experience</p>
+    </div>
+
+    <p class="feedback success" *ngIf="saveSuccess">Preferences saved!</p>
+    <p class="feedback error"   *ngIf="error">{{ error }}</p>
+
+    <div class="game-container pref-card">
+      <h3 class="card-label">Profile Picture</h3>
+      <hr class="divider"/>
+      <div class="avatar-grid">
+        <button
+          *ngFor="let avatar of avatarOptions"
+          class="avatar-btn"
+          [class.selected]="userPreferences.profilePicture === avatar.value"
+          (click)="changeProfilePicture(avatar.value)"
+          [title]="avatar.value"
+        >
+          {{ avatar.label }}
+        </button>
+      </div>
+      <p class="current-value">
+        Selected: {{ userPreferences.profilePicture || 'None' }}
+      </p>
+    </div>
+
+    <div class="game-container pref-card">
+      <h3 class="card-label">Theme</h3>
+      <hr class="divider"/>
+      <div class="option-grid">
+        <button
+          *ngFor="let theme of themes"
+          class="option-btn"
+          [class.selected]="userPreferences.theme === theme.value"
+          (click)="selectTheme(theme.value)"
+        >
+          {{ theme.label }}
+        </button>
+      </div>
+      <p class="current-value">
+        Selected: {{ userPreferences.theme }}
+      </p>
+    </div>
+
+    <div class="game-container pref-card">
+      <h3 class="card-label">Background Music</h3>
+      <hr class="divider"/>
+      <div class="option-grid">
+        <button
+          *ngFor="let music of musicOptions"
+          class="option-btn"
+          [class.selected]="userPreferences.backgroundMusic === music.value"
+          (click)="selectBackgroundMusic(music.value)"
+        >
+          {{ music.label }}
+        </button>
+      </div>
+
+      <!-- Volume slider — only show when music is not none -->
+      <div class="volume-control" *ngIf="userPreferences.backgroundMusic !== 'none'">
+        <label class="volume-label">Volume</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          [value]="volume"
+          (input)="onVolumeChange($event)"
+          class="volume-slider"
+        />
+      </div>
+
+      <p class="current-value">Selected: {{ userPreferences.backgroundMusic }}</p>
+    </div>
+
+    <p class="saving-indicator" *ngIf="isSaving">Saving...</p>
+
+  </div>
+</div>
