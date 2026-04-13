@@ -16,7 +16,8 @@ import {
 } from "@angular/fire/firestore";
 import { Auth, signInWithEmailAndPassword, signOut, user, createUserWithEmailAndPassword, UserCredential, getAuth } from '@angular/fire/auth';
 import {Observable, switchMap, of, queue} from 'rxjs';
-import { getDatabase, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "firebase/database";
+import { Database, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "@angular/fire/database";
+import {get, off} from '@angular/fire/database';
 import { UserPreferences } from '../account-preferences/account-preferences.component';
 // Revision history:
 //
@@ -24,12 +25,13 @@ import { UserPreferences } from '../account-preferences/account-preferences.comp
 // Derrick Mangari 2026-03-14       Created the FirebaseService to handle all interactions with Firebase Auth and Firestore, including user registration, login, logout, and CRUD operations for user data. Also implemented error handling for authentication methods.
 // Derrick Mangari 2026-03-15       Created functionialites for SocialHub (send Friend requests, Accept/Deny a friend Request, Retrieve Friend List, Listen to Friend Requests and Friends Status)
 // Justin P.       2026-04-12       Added functionalities required for matchmaking / multiplayer play
+// Justin P.       2026-04-12       Fixed imports due to issues with Login / Register pages
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
     private firestore = inject(Firestore);
     private auth = inject(Auth);
-    private database = getDatabase();
+    private database = inject(Database);
 
     // Auth
     currentUser$ = user(this.auth);
@@ -275,6 +277,196 @@ export class FirebaseService {
     });
   }
 
+  async createGameSession(player1Id: String, player2Id: String, gameMode: String, gridSize: String): Promise<string> {
+      const player1Data = await this.getUserSnapshot(player1Id);
+      const player2Data = await this.getUserSnapshot(player2Id);
+
+      // Create KakuroGame instance (kg)
+      const kgRef = await addDoc(collection(this.firestore, "kakuroGames"), {
+        gridSize,
+        state: "active",
+        createdAt: new Date()
+      });
+
+      // Create GameSession instance (gs)
+      const gsRef = await addDoc(collection(this.firestore, "gameSessions"), {
+        gameMode,
+        player1: { id: player1Id, username: player1Data?.username ?? "" },
+        player2: { id: player2Id, username: player2Data?.username ?? "" },
+        state: "active",
+        kakuroGameId: kgRef.id,
+        gridSize,
+        createdAt: new Date()
+      });
+
+      // Set both players with same game session
+      await set(ref(this.database, `playerSessions/${player1Id}`), { sessionId: gsRef.id });
+      await set(ref(this.database, `playerSessions/${player2Id}`), { sessionId: gsRef.id });
+
+      // Remove players from matchmaking queue
+      await this.leaveMatchmakingQueue(player1Id);
+      await this.leaveMatchmakingQueue(player2Id);
+
+      return gsRef.id;
+  }
+
+  getGameSession(sessionId: string): Observable<any> {
+      const ref = doc(this.firestore, `gameSessions/${sessionId}`);
+      return docData(ref, { idField: "id" });
+  }
+
+  // Pause game
+  async pauseGame(sessionId: String): Promise<void> {
+      const sessionRef = doc(this.firestore, `gameSessions/${sessionId}`);
+      await updateDoc(sessionRef, { state: "paused" });
+  }
+
+  // Resume game
+  async resumeGame(sessionId: String): Promise<void> {
+      const sessionRef = doc(this.firestore, `gameSessions/${sessionId}`);
+      await updateDoc(sessionRef, { state: "active" });
+  }
+
+  // Quit game
+  async quitGame(sessionId: String, quittingPlayerId: String, isMultiplayer: Boolean): Promise<void> {
+    const sessionRef = doc(this.firestore, `gameSessions/${sessionId}`);
+
+    if (isMultiplayer) {
+      // Notify players game has ended, then kick everyone out
+      const snap = await getDoc(sessionRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        const p1 = data["player1"]?.id;
+        const p2 = data["player2"]?.id;
+
+        // Remove both players from playerSessions
+        if (p1) await remove (ref(this.database, `playerSessions/${p1}`));
+        if (p2) await remove (ref(this.database, `playerSessions/${p2}`));
+
+        // Notify game end
+        await set(ref(this.database, `gameEnded/${sessionId}`), {
+          reason: "player_quit",
+          quittingPlayer: quittingPlayerId,
+          timestamp: serverTimestamp()
+        });
+      }
+    } else {
+      // Single player
+      await remove(ref(this.database, `playerSessions/${quittingPlayerId}`));
+    }
+
+    // Terminate game instance
+    await deleteDoc(sessionRef);
+  }
+
+  listenForGameEnd(sessionId: String, callback: (data: any) => void): () => void {
+      const endRef = ref(this.database, `gameEnded/${sessionId}`);
+      onValue(endRef, (snapshot) => {
+        if (snapshot.exists()) callback(snapshot.val());
+      });
+      return () => off(endRef);
+  }
+
+  // SendInvitation (duels)
+  async sendDuelInvitation(userId: String, friendId: String, gameMode: String, gridSize: String): Promise<string> {
+      const invitesRef = collection(this.firestore, "duelInvitations");
+      const inviteDoc = await addDoc(invitesRef, {
+        sender: userId,
+        receiver: friendId,
+        status: "pending",
+        grid: gridSize,
+        gameMode,
+        createdAt: new Date()
+      });
+
+      // Notify receiver in realtime DB
+      const rtInvitedRef = ref(this.database, `duelInvites/${friendId}/${inviteDoc.id}`);
+      await set(rtInvitedRef, {
+        inviteId: inviteDoc.id,
+        sender: userId,
+        grid: gridSize,
+        gameMode,
+        timestamp: serverTimestamp()
+      });
+
+      return inviteDoc.id;
+  }
+
+  listenForDuelInvites(uid: string, callback: (invites: any) => void): () => void {
+      const invitesRef = ref(this.database, `duelInvites/${uid}`);
+      onValue(invitesRef, (snapshot) => callback(snapshot.val()));
+      return () => off(invitesRef);
+  }
+
+  // Accept Invitation
+  async acceptDuelInvitation(inviteId: String, receiverId: String): Promise<string> {
+      const inviteRef = doc(this.firestore, `duelInvitations/${inviteId}`);
+      const inviteSnap = await getDoc(inviteRef);
+
+      if (!inviteSnap.exists()) throw new Error("Invite not found");
+      const invite = inviteSnap.data();
+
+      // Validate: receiver must be the current user
+      if (invite["receiver"] !== receiverId) throw new Error("Not the invite receiver");
+
+      // Update status
+      await updateDoc(inviteRef, { status: "accepted" });
+
+      // Fetch player data
+      const senderData = await this.getUserSnapshot(invite["sender"]);
+      const receiverData = await this.getUserSnapshot(receiverId);
+
+      // Create KakuroGame instance
+      const kgRef = await addDoc(collection(this.firestore, "kakuroGames"), {
+        gridSize: invite["grid"],
+        state: "active",
+        createdAt: new Date()
+      });
+
+      // Create GameSession instance
+      const gsRef = await addDoc(collection(this.firestore, "gameSessions"), {
+        gameMode: invite["gameMode"] ?? "Multiplayer",
+        player1: { id: invite["sender"], username: senderData?.username ?? "" },
+        player2: { id: receiverId, username: receiverData?.username ?? ""},
+        state: "active",
+        kakuroGameId: kgRef.id,
+        gridSize: invite["grid"],
+        createdAt: new Date()
+      });
+
+      // Associate players with session
+      await set(ref(this.database, `playerSessions/${invite["sender"]}`), { sessionId: gsRef.id });
+      await set(ref(this.database, `playerSessions/${receiverId}`), { sessionId: gsRef.id });
+
+      // Delete DuelInvitation
+      await deleteDoc(inviteRef);
+      await remove(ref(this.database, `duelInvites/${receiverId}/${inviteId}`));
+
+      return gsRef.id;
+  }
+
+  // Refuse Invitation
+  async refuseDuelInvitation(inviteId: String, receiverId: String): Promise<void> {
+      const inviteRef = doc(this.firestore, `duelInvitations/${inviteId}`);
+      const inviteSnap = await getDoc(inviteRef);
+
+      if (!inviteSnap.exists()) return;
+      const invite = inviteSnap.data();
+
+      // Set status to refused
+      await updateDoc(inviteRef, {status : "refused"});
+
+      // Notify sender in Realtime DB
+      await remove(ref(this.database, `duelInvites/${receiverId}/${inviteId}`));
+      await set(ref(this.database, `inviteRefused/${invite["sender"]}/${inviteId}`), {
+        inviteId,
+        timestamp: serverTimestamp()
+      });
+
+      // Delete DuelInvitation automatically after 1 minute of elapsed time
+      setTimeout(async () => {
+        try { await deleteDoc(inviteRef); } catch { }
+      }, 60_000);
   getUserPreferences(uid: string): Observable<any> {
     const ref = doc(this.firestore, `users/${uid}`);
     return docData(ref, { idField: 'id' });

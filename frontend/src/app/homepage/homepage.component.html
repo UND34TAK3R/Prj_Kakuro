@@ -1,1 +1,56 @@
-<p>homepage works!</p>
+<div class="hp-page">
+  <div class="hp-card">
+
+    <div class="hp-header">
+      <h1 class="hp-title">Play Kakuro</h1>
+      <p class="hp-subtitle">Configure your game and start playing</p>
+    </div>
+
+    <!-- Step 1: Select Game Mode -->
+    <section class="config-section">
+      <label class="config-label">Game Mode</label>
+      <div class="option-group">
+        <button
+          *ngFor="let mode of gameModes"
+          class="option-btn"
+          [class.selected]="selectedGameMode === mode"
+          (click)="selectGameMode(mode)">
+          <span class="option-icon">{{ mode === 'Singleplayer' ? '👤' : '⚔️' }}</span>
+          <span class="option-text">{{ mode }}</span>
+          <span class="option-desc">{{ mode === 'Singleplayer' ? 'Play at your own pace' : 'Challenge another player' }}</span>
+        </button>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Step 2: Select Grid Size -->
+    <section class="config-section">
+      <label class="config-label">Grid Size</label>
+      <div class="grid-group">
+        <button
+          *ngFor="let size of gridSizes"
+          class="grid-btn"
+          [class.selected]="selectedGridSize === size"
+          (click)="selectGridSize(size)">
+          {{ size }}
+        </button>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Summary & Play -->
+    <div class="play-section">
+      <p class="play-summary">
+        <span class="summary-chip">{{ selectedGameMode }}</span>
+        <span class="summary-sep">·</span>
+        <span class="summary-chip">{{ selectedGridSize }}</span>
+      </p>
+      <button class="play-btn" (click)="playGame()">
+        {{ selectedGameMode === 'Singleplayer' ? 'Start Game' : 'Find Match' }}
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 //
 // DEVELOPER          DATE                            COMMENTS
 // Derrick Mangari 2026-03-13       Created the Register Component with no functionality, just the template and styles for now.
-// Derrick Mangari 2026-03-14       Added form controls and validation, and implemented the signUp method to register users with Firebase Auth. 
+// Derrick Mangari 2026-03-14       Added form controls and validation, and implemented the signUp method to register users with Firebase Auth.
 //                                  Also added error handling to display user-friendly messages based on Firebase error codes, and implemented a custom validator to ensure password and confirm password fields match.
 
 export class RegisterComponent {
