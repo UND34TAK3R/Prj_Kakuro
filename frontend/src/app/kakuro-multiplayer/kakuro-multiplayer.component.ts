@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
+import { ThemeService } from '../services/theme.service';
 import {
   Firestore,
   doc,
@@ -46,6 +47,7 @@ interface Cell {
   styleUrl: './kakuro-multiplayer.component.css'
 })
 export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
+  private themeService = inject(ThemeService);
   private firebase= inject(FirebaseService); // firebaseService
   private firestore = inject(Firestore);
   router = inject(Router);
@@ -90,6 +92,12 @@ export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
   // =========================================================
   ngOnInit(): void {
     this.sessionId = this.route.snapshot.queryParams['sessionId'] ?? '';
+    this.currentUid = localStorage.getItem('uid') || '';
+
+    if (this.currentUid) {
+      this.themeService.loadThemeForUser(this.currentUid);
+    }
+
     if (!this.sessionId) {
       this.error = 'No session ID provided.';
       this.isLoading = false;

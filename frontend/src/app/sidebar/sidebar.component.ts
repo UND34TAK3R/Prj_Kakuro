@@ -29,7 +29,7 @@ export class SidebarComponent {
   navItems = [
       {
         label: 'Play Game',
-        route: '/homepage',
+        route: '/gameConfig',
       },
       {
         label: 'Social Hub',

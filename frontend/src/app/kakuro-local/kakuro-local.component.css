@@ -1,6 +1,7 @@
 .page {
   min-height: 100vh;
-  background: #f3f4f6;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   padding: 24px;
   font-family: Arial, sans-serif;
 }
@@ -22,7 +23,7 @@
 .game-container {
   max-width: 1100px;
   margin: 0 auto;
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
@@ -41,7 +42,7 @@
 }
 
 .card {
-  background: #f9fafb;
+  background: var(--bg-card);
   padding: 16px;
   border-radius: 12px;
 }
@@ -139,14 +140,14 @@ label {
 
 .kakuro-grid {
   border-collapse: collapse;
-  background: white;
+  background: var(--bg-secondary);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cell {
   width: 50px;
   height: 50px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   padding: 0;
   text-align: center;
   position: relative;
@@ -274,6 +275,7 @@ label {
   }
 
   .game-container {
+    background: var(--bg-secondary);
     padding: 16px;
   }
 
