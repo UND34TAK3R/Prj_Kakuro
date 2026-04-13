@@ -277,6 +277,44 @@ export class FirebaseService {
     });
   }
 
+  // Matchmaking
+  async joinMatchmakingQueue(uid: String, gameMode: String, gridSize: String): Promise<void> {
+    const queueRef = ref(this.database, `matchmakingQueue/${uid}`);
+    await set(queueRef, {
+      userId: uid,
+      gameMode,
+      gridSize,
+      timestamp: serverTimestamp()
+    });
+  }
+
+  async leaveMatchmakingQueue(uid: String): Promise<void> {
+    const queueRef = ref(this.database, `matchmakingQueue/${uid}`);
+    await remove(queueRef)
+  }
+
+  async findCompatibleOpponent(currentUid: String, gameMode: String, gridSize: String): Promise<string | null> {
+    const queueRef = ref(this.database, 'matchmakingQueue');
+    const snapshot = await get(queueRef);
+    if (!snapshot.exists()) return null;
+
+    const queue = snapshot.val() as Record<string, any>;
+    for (const [uid, entry] of Object.entries(queue)) {
+      if (uid !== currentUid && entry.gameMode === gameMode && entry.gridSize === gridSize) {
+        return uid;
+      }
+    }
+    return null;
+  }
+
+  listenForMatch(uid: string, callback: (sessionId: string | null) => void): () => void {
+    const matchRef = ref(this.database, `playerSessions/${uid}`);
+    onValue(matchRef, (snapshot) => {
+      callback(snapshot.exists() ? snapshot.val().sessionId : null);
+    });
+    return () => off(matchRef);
+  }
+
   async createGameSession(player1Id: String, player2Id: String, gameMode: String, gridSize: String): Promise<string> {
       const player1Data = await this.getUserSnapshot(player1Id);
       const player2Data = await this.getUserSnapshot(player2Id);
@@ -467,7 +505,9 @@ export class FirebaseService {
       setTimeout(async () => {
         try { await deleteDoc(inviteRef); } catch { }
       }, 60_000);
-  getUserPreferences(uid: string): Observable<any> {
+  }
+
+  getUserPreferences(uid: String): Observable<any> {
     const ref = doc(this.firestore, `users/${uid}`);
     return docData(ref, { idField: 'id' });
   }
