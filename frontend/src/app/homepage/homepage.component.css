@@ -205,3 +205,135 @@
     font-size: 1.6rem;
   }
 }
+
+/* ── Duel Invite Section ─────────────────────────── */
+.duel-section { margin-top: 0; }
+
+.config-optional {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary, #6b7280);
+  margin-left: 6px;
+}
+
+.empty-friends {
+  font-size: 13px;
+  color: var(--text-secondary, #6b7280);
+  padding: 10px 0 4px;
+  font-style: italic;
+}
+
+.friends-duel-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.friend-duel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+
+.friend-duel-row:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.friend-duel-row.selected-friend {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.friend-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.friend-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.friend-check {
+  font-size: 14px;
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+/* Duel action row */
+.duel-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.duel-invite-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  font-family: inherit;
+}
+
+.duel-invite-btn:hover:not(:disabled) { opacity: 0.88; }
+.duel-invite-btn:active:not(:disabled) { transform: scale(0.99); }
+.duel-invite-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Status indicator row */
+.invite-status-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.invite-status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.invite-status-dot.red    { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.18); }
+.invite-status-dot.yellow { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.18); }
+.invite-status-dot.green  { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.18); }
+
+.invite-status-label {
+  font-size: 13px;
+  color: #374151;
+  font-family: inherit;
+}

@@ -40,6 +40,54 @@
 
     <hr class="divider" />
 
+    <ng-container *ngIf="selectedGameMode === 'Multiplayer'">
+      <hr class = "divider"/>
+      <section class = "config-section duel-section">
+        <label class = "config-label">
+          Invite a friend to Duel!
+        </label>
+        <div *ngIf="friends.length === 0" class = "empty-friends">
+          No friends yet. Add friends in the Social Hub to invite them.
+        </div>
+
+        <ul class = "friends-duel-list" *ngIf="friends.length > 0">
+          <li *ngFor="let friend of friends" class = "friend-duel-row" [class.selected-friend]="selectedFriend?.id === friend.id" (click)="selectFriendToDuel(friend)">
+            <span class = "friend-avatar"> {{ friend.username.charAt(0).toUpperCase() }} </span>
+            <span class = "friend-name"> {{ friend.username }} </span>
+            <span class = "friend-check" *ngIf="selectedFriend?.id === friend.id"> ✓ </span>
+          </li>
+        </ul>
+
+        <!-- Send Invite Button -->
+        <div class="duel-actions" *ngIf="selectedFriend">
+          <button
+            class="duel-invite-btn"
+            [disabled]="inviteStatus === 'sending' || inviteStatus === 'not-received' || inviteStatus === 'received' || inviteStatus === 'ready'"
+            (click)="sendDuelInvite()">
+            <span *ngIf="inviteStatus === 'idle' || inviteStatus === 'error' || inviteStatus === 'refused'">
+              Send Duel Invite to {{ selectedFriend.username }}
+            </span>
+            <span *ngIf="inviteStatus === 'sending'">Sending…</span>
+            <span *ngIf="inviteStatus === 'not-received' || inviteStatus === 'received'">Invite Sent</span>
+            <span *ngIf="inviteStatus === 'ready'">Starting…</span>
+          </button>
+
+          <!-- Status indicator -->
+          <div class="invite-status-row" *ngIf="inviteStatus !== 'idle'">
+            <span
+              class="invite-status-dot"
+              [class.red]="inviteStatusColor === 'red'"
+              [class.yellow]="inviteStatusColor === 'yellow'"
+              [class.green]="inviteStatusColor === 'green'">
+            </span>
+            <span class="invite-status-label">{{ inviteStatusLabel }}</span>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+
+    <hr class="divider" />
+
     <!-- Summary & Play -->
     <div class="play-section">
       <p class="play-summary">

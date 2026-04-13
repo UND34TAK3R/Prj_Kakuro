@@ -8,6 +8,7 @@ import { RankingComponent } from './ranking/ranking.component';
 import {MatchmakingComponent} from './matchmaking/matchmaking.component';
 import {KakuroMultiplayerComponent} from './kakuro-multiplayer/kakuro-multiplayer.component';
 import { AccountPreferencesComponent } from './account-preferences/account-preferences.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,5 +20,6 @@ export const routes: Routes = [
     { path: 'localGame', component: KakuroLocalComponent },
     { path: 'matchmaking', component: MatchmakingComponent },
     { path: 'multiplayerGame', component: KakuroMultiplayerComponent },
-    { path: 'preferences', component: AccountPreferencesComponent }
+    { path: 'preferences', component: AccountPreferencesComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
 ];

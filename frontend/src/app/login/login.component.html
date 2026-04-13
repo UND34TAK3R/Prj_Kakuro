@@ -37,6 +37,7 @@
           <span class="field-error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
             Password is required.
           </span>
+          <a routerLink="/reset-password" class="forgot-link">Forgot password?</a>
         </div>
 
         <p class="field-error global-error" *ngIf="error">{{ error }}</p>
