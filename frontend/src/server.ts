@@ -10,9 +10,11 @@ import { fileURLToPath } from 'node:url';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
+const assetsFolder = resolve(serverDistFolder, '../../src/assets');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+app.use('/assets', express.static(assetsFolder));
 
 /**
  * Example Express Rest API endpoints can be defined here.

@@ -18,7 +18,7 @@ import { Auth, signInWithEmailAndPassword, signOut, user, createUserWithEmailAnd
 import {Observable, switchMap, of, queue} from 'rxjs';
 import { Database, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "@angular/fire/database";
 import {get, off} from '@angular/fire/database';
-
+import { UserPreferences } from '../account-preferences/account-preferences.component';
 // Revision history:
 //
 // DEVELOPER          DATE                            COMMENTS
@@ -265,42 +265,16 @@ export class FirebaseService {
         });
     }
 
-    // Matchmaking
-  async joinMatchmakingQueue(uid: String, gameMode: String, gridSize: String): Promise<void> {
-      const queueRef = ref(this.database, `matchmakingQueue/${uid}`);
-      await set(queueRef, {
-        userId: uid,
-        gameMode,
-        gridSize,
-        timestamp: serverTimestamp()
-      });
-  }
-
-  async leaveMatchmakingQueue(uid: String): Promise<void> {
-      const queueRef = ref(this.database, `matchmakingQueue/${uid}`);
-      await remove(queueRef)
-  }
-
-  async findCompatibleOpponent(currentUid: String, gameMode: String, gridSize: String): Promise<string | null> {
-      const queueRef = ref(this.database, 'matchmakingQueue');
-      const snapshot = await get(queueRef);
-      if (!snapshot.exists()) return null;
-
-      const queue = snapshot.val() as Record<string, any>;
-      for (const [uid, entry] of Object.entries(queue)) {
-        if (uid !== currentUid && entry.gameMode === gameMode && entry.gridSize === gridSize) {
-          return uid;
-        }
+  //user preference
+  async saveUserPreferences(uid: string, preferences: UserPreferences): Promise<void> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    await updateDoc(userRef, {
+      preferences: {
+        theme: preferences.theme,
+        backgroundMusic: preferences.backgroundMusic,
+        profilePicture: preferences.profilePicture
       }
-    return null;
-  }
-
-  listenForMatch(uid: string, callback: (sessionId: string | null) => void): () => void {
-      const matchRef = ref(this.database, `playerSessions/${uid}`);
-      onValue(matchRef, (snapshot) => {
-        callback(snapshot.exists() ? snapshot.val().sessionId : null);
-      });
-      return () => off(matchRef);
+    });
   }
 
   async createGameSession(player1Id: String, player2Id: String, gameMode: String, gridSize: String): Promise<string> {
@@ -493,5 +467,8 @@ export class FirebaseService {
       setTimeout(async () => {
         try { await deleteDoc(inviteRef); } catch { }
       }, 60_000);
+  getUserPreferences(uid: string): Observable<any> {
+    const ref = doc(this.firestore, `users/${uid}`);
+    return docData(ref, { idField: 'id' });
   }
 }

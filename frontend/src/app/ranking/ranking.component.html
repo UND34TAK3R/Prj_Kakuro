@@ -4,80 +4,109 @@
 <div class="page">
   <div class="leaderboard-container">
 
+    <!-- Header -->
     <div class="auth-header">
       <h1 class="auth-title">Leaderboard</h1>
       <p class="auth-subtitle">Top players across all grid sizes</p>
     </div>
 
+    <!-- Scope Tabs: Global / Friends -->
     <div class="scope-tabs">
       <button
         class="scope-tab"
         [class.active]="scope === 'global'"
-        (click)="scope = 'global'"
+        (click)="onScopeChange('global')"
       >
         Global
       </button>
       <button
         class="scope-tab"
         [class.active]="scope === 'friends'"
-        (click)="scope = 'friends'"
+        (click)="onScopeChange('friends')"
       >
         Friends
       </button>
     </div>
 
+    <!-- Grid Size Tabs: 4x4 / 6x6 / 8x8 -->
     <div class="grid-tabs">
       <button
         class="grid-tab"
         [class.active]="grid === '4x4'"
-        (click)="grid = '4x4'"
+        (click)="onGridChange('4x4')"
       >
         4 × 4
       </button>
       <button
         class="grid-tab"
         [class.active]="grid === '6x6'"
-        (click)="grid = '6x6'"
+        (click)="onGridChange('6x6')"
       >
         6 × 6
       </button>
       <button
         class="grid-tab"
         [class.active]="grid === '8x8'"
-        (click)="grid = '8x8'"
+        (click)="onGridChange('8x8')"
       >
         8 × 8
       </button>
     </div>
 
+    <!-- Leaderboard Card -->
     <div class="game-container">
 
-      <table class="leaderboard-table">
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="search-loading">
+        <span class="spinner"></span> Loading leaderboard...
+      </div>
+
+      <!-- Error state -->
+      <p *ngIf="error" style="color: #ef4444; font-size: 13px; text-align: center;">
+        {{ error }}
+      </p>
+
+      <!-- Table -->
+      <table class="leaderboard-table" *ngIf="!isLoading">
         <thead>
-          <tr>
-            <th class="col-rank">#</th>
-            <th class="col-name">Player</th>
-            <th class="col-time">Best Time</th>
-          </tr>
+        <tr>
+          <th class="col-rank">#</th>
+          <th class="col-name">Player</th>
+          <th class="col-time">Best Time</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of getRows(); let i = index" class="leaderboard-row">
-            <td class="col-rank">
-              <span class="rank-badge" [ngClass]="getRankClass(i + 1)">
-                {{ i + 1 }}
+
+        <!-- Real leaderboard rows -->
+        <tr
+          *ngFor="let row of getRows()"
+          class="leaderboard-row"
+        >
+          <td class="col-rank">
+              <span class="rank-badge" [ngClass]="getRankClass(row.rank)">
+                {{ row.rank }}
               </span>
-            </td>
-            <td class="col-name">
-              <span class="player-name empty">—</span>
-            </td>
-            <td class="col-time">
-              <span class="time-value">-- : --</span>
-            </td>
-          </tr>
+          </td>
+          <td class="col-name">
+            <span class="player-name">{{ row.username }}</span>
+          </td>
+          <td class="col-time">
+            <span class="time-value">{{ row.time }}</span>
+          </td>
+        </tr>
+
+        <!-- Empty state — no scores yet -->
+        <tr *ngIf="!isLoading && leaderboardRows.length === 0">
+          <td colspan="3" style="text-align: center; padding: 1.5rem 0; color: #9a9690; font-family: 'DM Sans', sans-serif; font-size: 13px;">
+            No scores recorded yet for {{ grid }}.
+          </td>
+        </tr>
+
         </tbody>
       </table>
 
-      <p class="empty-notice" *ngIf="scope === 'friends'">
+      <!-- Friends empty notice -->
+      <p class="empty-notice" *ngIf="scope === 'friends' && leaderboardRows.length === 0 && !isLoading">
         Add friends to see how you compare!
       </p>
 

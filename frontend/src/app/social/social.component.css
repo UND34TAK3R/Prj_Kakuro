@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap');
 
-/* ---------- Page wrapper ---------- */
+/* Page wrapper */
 .social-page {
   align-items: flex-start;
   padding: 32px 24px 48px;
+  background: var(--bg-primary);
 }
 
 .hub-container {
@@ -15,64 +16,66 @@
   gap: 24px;
 }
 
-/* ---------- Header ---------- */
+/* Header */
 .auth-header {
   text-align: center;
   margin-bottom: 4px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .auth-title {
   font-family: 'Playfair Display', serif;
   font-size: 42px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0 0 8px;
 }
 
 .auth-subtitle {
   font-size: 15px;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 0;
 }
 
-/* ---------- Friends 3-column grid ---------- */
+/* Friends 3-column grid */
 .hub-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-/* ---------- Shared card tweaks ---------- */
-.friends-card {
-  padding: 22px 20px 16px;
-}
+/* Shared card tweaks */
+.friends-card { padding: 22px 20px 16px; }
+.search-card  { padding: 22px 24px 20px; }
 
-.search-card {
-  padding: 22px 24px 20px;
-}
-
-/* ---------- Card section label ---------- */
+/* Card label */
 .card-label {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
   font-family: 'DM Sans', Arial, sans-serif;
   margin-bottom: 0;
 }
 
 .card-sub {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 4px 0 0;
   font-family: 'DM Sans', Arial, sans-serif;
 }
 
-/* ---------- Status dot (label) ---------- */
+/* Game container card */
+.game-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+}
+
+/* Status dot */
 .status-dot {
   width: 8px;
   height: 8px;
@@ -82,7 +85,7 @@
 .status-dot.online  { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,0.2); }
 .status-dot.offline { background: #d1d5db; }
 
-/* ---------- Count pills ---------- */
+/* Count pills */
 .count-pill {
   margin-left: auto;
   font-size: 11px;
@@ -95,7 +98,7 @@
 .count-pill.gray  { background: #f3f4f6; color: #6b7280; }
 .count-pill.blue  { background: #dbeafe; color: #2563eb; }
 
-/* ---------- Friends list ---------- */
+/* Friends list */
 .friends-list {
   list-style: none;
   padding: 0;
@@ -113,42 +116,22 @@
   border-radius: 8px;
   transition: background 0.15s;
 }
-.friend-row:hover { background: #f9fafb; }
+.friend-row:hover  { background: var(--bg-card); }
 .friend-row.dimmed { opacity: 0.55; }
 
-/* ---------- Friend username ---------- */
+/* Friend username */
 .friend-username {
   flex: 1;
   font-size: 13.5px;
   font-weight: 500;
-  color: #1f2937;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: 'DM Sans', Arial, sans-serif;
 }
 
-/* ---------- Icon button (message) ---------- */
-.icon-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e5e7eb;
-  background: white;
-  color: #6b7280;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
-.icon-btn svg { width: 14px; height: 14px; }
-.icon-btn:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
-.icon-btn.muted { color: #d1d5db; }
-.icon-btn.muted:hover { border-color: #9ca3af; color: #6b7280; background: #f9fafb; }
-
-/* ---------- Accept / Decline buttons ---------- */
+/* Accept / Decline buttons */
 .req-actions {
   display: flex;
   gap: 6px;
@@ -183,15 +166,22 @@
 }
 .req-btn.decline:hover { background: #fee2e2; border-color: #fca5a5; }
 
-/* ---------- Empty state ---------- */
+/* Empty state */
 .empty-state {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--text-secondary);
   padding: 10px 6px 4px;
   font-family: 'DM Sans', Arial, sans-serif;
 }
 
-/* ---------- Search bar ---------- */
+/* Divider */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 12px 0;
+}
+
+/* Search bar */
 .search-wrap {
   position: relative;
   display: flex;
@@ -203,7 +193,7 @@
   left: 13px;
   display: flex;
   align-items: center;
-  color: #9ca3af;
+  color: var(--text-secondary);
   pointer-events: none;
   transition: color 0.2s;
 }
@@ -213,8 +203,9 @@
   padding-left: 40px !important;
   padding-right: 40px !important;
   border-radius: 10px !important;
-  border: 1.5px solid #e5e7eb !important;
-  background: #f9fafb !important;
+  border: 1.5px solid var(--border-color) !important;
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s !important;
   padding-top: 13px !important;
   padding-bottom: 13px !important;
@@ -223,14 +214,9 @@
 }
 
 .search-field:focus {
-  border-color: #3b82f6 !important;
-  background: #ffffff !important;
+  border-color: var(--accent) !important;
+  background: var(--bg-secondary) !important;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
-
-.search-field:focus ~ .search-icon-wrap,
-.search-wrap:focus-within .search-icon-wrap {
-  color: #3b82f6;
 }
 
 .clear-btn {
@@ -242,23 +228,26 @@
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  color: #9ca3af;
-  background: #e5e7eb;
+  color: var(--text-secondary);
+  background: var(--border-color);
   border: none;
   border-radius: 99px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
   line-height: 1;
 }
-.clear-btn:hover { background: #d1d5db; color: #374151; }
+.clear-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
 
-/* ---------- Search loading ---------- */
+/* Search loading */
 .search-loading {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--text-secondary);
   padding: 10px 6px;
   font-family: 'DM Sans', Arial, sans-serif;
 }
@@ -266,8 +255,8 @@
 .spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid #e5e7eb;
-  border-top-color: #3b82f6;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   display: inline-block;
@@ -275,17 +264,20 @@
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ---------- Result rows ---------- */
+/* Result rows */
 .result-row {
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 10px 10px;
+  padding: 10px;
   margin-bottom: 6px;
-  background: #fafafa;
+  background: var(--bg-card);
 }
-.result-row:hover { background: #f3f4f6; border-color: #e5e7eb; }
+.result-row:hover {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
 
-/* ---------- Add friend button ---------- */
+/* Add friend button */
 .add-btn {
   padding: 6px 14px;
   border-radius: 8px;
@@ -293,8 +285,8 @@
   font-weight: 500;
   font-family: 'DM Sans', Arial, sans-serif;
   cursor: pointer;
-  border: 1px solid #3b82f6;
-  background: #3b82f6;
+  border: 1px solid var(--accent);
+  background: var(--accent);
   color: white;
   flex-shrink: 0;
   transition: opacity 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
@@ -308,24 +300,14 @@
   cursor: default;
 }
 
-/* ---------- Responsive ---------- */
+/* Responsive */
 @media (max-width: 860px) {
-  .hub-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .friends-card:last-child {
-    grid-column: 1 / -1;
-  }
+  .hub-grid { grid-template-columns: 1fr 1fr; }
+  .friends-card:last-child { grid-column: 1 / -1; }
 }
 
 @media (max-width: 560px) {
-  .hub-grid {
-    grid-template-columns: 1fr;
-  }
-  .friends-card:last-child {
-    grid-column: unset;
-  }
-  .social-page {
-    padding: 20px 16px 40px;
-  }
+  .hub-grid { grid-template-columns: 1fr; }
+  .friends-card:last-child { grid-column: unset; }
+  .social-page { padding: 20px 16px 40px; }
 }
