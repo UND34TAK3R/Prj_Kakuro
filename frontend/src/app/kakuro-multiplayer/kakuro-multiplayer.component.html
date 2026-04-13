@@ -1,0 +1,158 @@
+<div class="page">
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="overlay-state">
+    <div class="loading-spinner"></div>
+    <p>Loading game…</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!isLoading && error" class="overlay-state">
+    <p class="error-msg">{{ error }}</p>
+    <button class="action-btn" (click)="router.navigate(['/homepage'])">Back to Home</button>
+  </div>
+
+  <!-- Main game view -->
+  <ng-container *ngIf="!isLoading && !error">
+
+    <header class="header">
+      <h1>Kakuro – Multiplayer</h1>
+      <p>{{ gameMode }} · {{ gridSize }} · vs <strong>{{ opponentName }}</strong></p>
+    </header>
+
+    <div class="game-container">
+      <div class="layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+
+          <!-- Game Info -->
+          <div class="card">
+            <h3>Game Info</h3>
+            <p>⏱ Time: {{ time }}</p>
+            <p>📏 Grid: {{ gridSize }}</p>
+            <p>👤 You: {{ myName }}</p>
+            <p>⚔️ Opponent: {{ opponentName }}</p>
+
+            <!-- Status badge -->
+            <div class="status-badge active"   *ngIf="sessionState === 'active'">▶ In Progress</div>
+            <div class="status-badge paused"   *ngIf="sessionState === 'paused'">⏸ Paused</div>
+            <div class="status-badge finished" *ngIf="sessionState === 'finished'">🏁 Finished</div>
+
+            <p *ngIf="isGameComplete" class="success">🎉 You solved it!</p>
+            <p *ngIf="opponentLeft"   class="opponent-left">⚠️ Opponent disconnected.</p>
+          </div>
+
+          <!-- Controls -->
+          <div class="card">
+            <h3>Controls</h3>
+
+            <button
+              class="ctrl-btn pause"
+              *ngIf="sessionState === 'active'"
+              (click)="pauseGame()">
+              ⏸ Pause Game
+            </button>
+
+            <button
+              class="ctrl-btn resume"
+              *ngIf="sessionState === 'paused'"
+              (click)="resumeGame()">
+              ▶ Resume Game
+            </button>
+
+            <button
+              class="ctrl-btn quit"
+              *ngIf="sessionState !== 'finished'"
+              (click)="quitGame()">
+              ✖ Quit Game
+            </button>
+
+            <button
+              class="ctrl-btn home"
+              *ngIf="sessionState === 'finished' || opponentLeft"
+              (click)="router.navigate(['/homepage'])">
+              🏠 Back to Home
+            </button>
+          </div>
+
+          <!-- Instructions -->
+          <div class="card">
+            <h3>Instructions</h3>
+            <ul>
+              <li>Fill each white cell with a number 1–9</li>
+              <li>Numbers in each run must add up to the clue</li>
+              <li>No duplicate numbers in the same run</li>
+              <li>Top-right clue = across · Bottom-left clue = down</li>
+            </ul>
+          </div>
+
+        </aside>
+
+        <!-- ── Board ── -->
+        <main class="board">
+
+          <!-- Paused overlay -->
+          <div class="pause-overlay" *ngIf="sessionState === 'paused'">
+            <div class="pause-card">
+              <p class="pause-icon">⏸</p>
+              <p class="pause-text">Game Paused</p>
+              <button class="ctrl-btn resume" (click)="resumeGame()">▶ Resume</button>
+            </div>
+          </div>
+
+          <!-- Finished overlay -->
+          <div class="pause-overlay" *ngIf="sessionState === 'finished' && !isLoading">
+            <div class="pause-card">
+              <p class="pause-icon">{{ isGameComplete ? '🎉' : '🏁' }}</p>
+              <p class="pause-text">{{ isGameComplete ? 'Puzzle Complete!' : (opponentLeft ? 'Opponent Left' : 'Game Over') }}</p>
+              <p class="pause-sub">Final time: {{ time }}</p>
+              <button class="ctrl-btn home" (click)="router.navigate(['/homepage'])">🏠 Back to Home</button>
+            </div>
+          </div>
+
+          <div class="grid-container">
+            <div *ngIf="!isGridReady" class="welcome-message">
+              <p>Preparing board…</p>
+            </div>
+
+            <table class="kakuro-grid" *ngIf="isGridReady && grid.length > 0">
+              <tbody>
+              <tr *ngFor="let row of grid; let i = index; trackBy: trackByIndex">
+                <td *ngFor="let cell of row; let j = index; trackBy: trackByIndex"
+                    [class.black-cell]="cell.isBlack"
+                    [class.clue-cell]="cell.isClue"
+                    [class.correct-cell]="!cell.isBlack && cell.value !== undefined && isCellCorrect(cell)"
+                    [class.incorrect-cell]="!cell.isBlack && cell.value !== undefined && !isCellCorrect(cell)"
+                    class="cell">
+
+                  <!-- Clue cell -->
+                  <div *ngIf="cell.isBlack && cell.isClue" class="clue-container">
+                    <div class="clue-diagonal"></div>
+                    <span class="clue-down"   *ngIf="cell.clueDown">{{ cell.clueDown }}</span>
+                    <span class="clue-across" *ngIf="cell.clueAcross">{{ cell.clueAcross }}</span>
+                  </div>
+
+                  <!-- Plain black cell -->
+                  <div *ngIf="cell.isBlack && !cell.isClue" class="black-fill"></div>
+
+                  <!-- Playable cell -->
+                  <input
+                    *ngIf="!cell.isBlack"
+                    type="number" min="1" max="9"
+                    [(ngModel)]="cell.value"
+                    (ngModelChange)="onCellChange(cell)"
+                    [disabled]="sessionState !== 'active' || isGameComplete || (cell.isFixed ?? false)"
+                    class="cell-input"
+                    [class.fixed-cell]="cell.isFixed">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </ng-container>
+</div>

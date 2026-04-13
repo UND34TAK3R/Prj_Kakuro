@@ -5,6 +5,8 @@ import { KakuroLocalComponent } from './kakuro-local/kakuro-local.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { SocialHubComponent } from './social/social.component';
 import { RankingComponent } from './ranking/ranking.component';
+import {MatchmakingComponent} from './matchmaking/matchmaking.component';
+import {KakuroMultiplayerComponent} from './kakuro-multiplayer/kakuro-multiplayer.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,5 +15,7 @@ export const routes: Routes = [
     { path: 'homepage', component: HomepageComponent },
     { path: 'social', component: SocialHubComponent },
     { path: 'rankings', component: RankingComponent },
-    { path: 'localGame', component: KakuroLocalComponent }
+    { path: 'localGame', component: KakuroLocalComponent },
+    { path: 'matchmaking', component: MatchmakingComponent },
+    { path: 'multiplayerGame', component: KakuroMultiplayerComponent },
 ];

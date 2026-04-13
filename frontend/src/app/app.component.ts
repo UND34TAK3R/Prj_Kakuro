@@ -13,16 +13,16 @@ import { FirebaseService } from './services/firebase.service';
 })
 export class AppComponent implements OnInit{
   title = 'Kakuro Game';
- 
+
   // Routes where sidebar should not appear
-  private noSidebarRoutes = ['/login', '/register', '', '/localGame'];
+  private noSidebarRoutes = ['/login', '/register', '', '/localGame', '/multiplayerGame'];
   private firebaseService = inject(FirebaseService)
- 
+
   constructor(private router: Router) {}
- 
+
   showSidebar(): boolean {
-    const currentUrl = this.router.url;
-    return !this.noSidebarRoutes.includes(currentUrl);
+    const path = this.router.url.split('?')[0];
+    return !this.noSidebarRoutes.includes(path);
   }
 
   private currentUid: string | null = null;

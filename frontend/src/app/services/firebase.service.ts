@@ -16,7 +16,7 @@ import {
 } from "@angular/fire/firestore";
 import { Auth, signInWithEmailAndPassword, signOut, user, createUserWithEmailAndPassword, UserCredential, getAuth } from '@angular/fire/auth';
 import {Observable, switchMap, of, queue} from 'rxjs';
-import { getDatabase, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "firebase/database";
+import { Database, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "@angular/fire/database";
 import {get, off} from '@angular/fire/database';
 
 // Revision history:
@@ -25,12 +25,13 @@ import {get, off} from '@angular/fire/database';
 // Derrick Mangari 2026-03-14       Created the FirebaseService to handle all interactions with Firebase Auth and Firestore, including user registration, login, logout, and CRUD operations for user data. Also implemented error handling for authentication methods.
 // Derrick Mangari 2026-03-15       Created functionialites for SocialHub (send Friend requests, Accept/Deny a friend Request, Retrieve Friend List, Listen to Friend Requests and Friends Status)
 // Justin P.       2026-04-12       Added functionalities required for matchmaking / multiplayer play
+// Justin P.       2026-04-12       Fixed imports due to issues with Login / Register pages
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
     private firestore = inject(Firestore);
     private auth = inject(Auth);
-    private database = getDatabase();
+    private database = inject(Database);
 
     // Auth
     currentUser$ = user(this.auth);
@@ -336,7 +337,7 @@ export class FirebaseService {
   }
 
   getGameSession(sessionId: string): Observable<any> {
-      const ref = doc(this.firestore, `gameSession/${sessionId}`);
+      const ref = doc(this.firestore, `gameSessions/${sessionId}`);
       return docData(ref, { idField: "id" });
   }
 
@@ -349,7 +350,7 @@ export class FirebaseService {
   // Resume game
   async resumeGame(sessionId: String): Promise<void> {
       const sessionRef = doc(this.firestore, `gameSessions/${sessionId}`);
-      await updateDoc(sessionRef, { state: "active "});
+      await updateDoc(sessionRef, { state: "active" });
   }
 
   // Quit game
@@ -377,7 +378,7 @@ export class FirebaseService {
       }
     } else {
       // Single player
-      await remove(ref(this.database, `playerSessions/${sessionId}`));
+      await remove(ref(this.database, `playerSessions/${quittingPlayerId}`));
     }
 
     // Terminate game instance
