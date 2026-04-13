@@ -104,7 +104,7 @@ export class MatchmakingComponent implements OnInit, OnDestroy {
   async cancelSearch(): Promise<void> {
     await this.firebase.leaveMatchmakingQueue(this.currentUserId);
     this.cleanup();
-    await this.router.navigate(["/homepage"])
+    await this.router.navigate(["/gameConfig"])
   }
 
   private cleanup(): void {

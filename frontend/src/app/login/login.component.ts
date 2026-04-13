@@ -41,7 +41,7 @@ export class LoginComponent {
 
     try {
       await this.firebase.login(email!, password!);
-      await this.router.navigate(['/homepage']);
+      await this.router.navigate(['/gameConfig']);
     } catch (err: any) {
       const code = err?.code ?? err?.message ?? '';
       console.log(code, err.message);
