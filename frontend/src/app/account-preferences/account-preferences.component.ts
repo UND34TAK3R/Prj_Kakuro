@@ -28,7 +28,6 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
   isSaving: boolean = false;
   saveSuccess: boolean = false;
   error: string  = '';
-  volume: number = 0.4;
 
   // "up : UserPreferences" from all 3 sequence diagrams
   userPreferences: UserPreferences = {
@@ -127,9 +126,4 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
     setTimeout(() => this.saveSuccess = false, 2000);
   }
 
-  onVolumeChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.volume = parseFloat(input.value);
-    this.musicService.setVolume(this.volume);
-  }
 }

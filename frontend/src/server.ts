@@ -14,8 +14,7 @@ const assetsFolder = resolve(serverDistFolder, '../../src/assets');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
-app.use('/assets', express.static(assetsFolder));
-
+app.use('/assets', express.static(assetsFolder))
 /**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.

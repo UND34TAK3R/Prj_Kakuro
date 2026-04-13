@@ -61,21 +61,6 @@
           {{ music.label }}
         </button>
       </div>
-
-      <!-- Volume slider — only show when music is not none -->
-      <div class="volume-control" *ngIf="userPreferences.backgroundMusic !== 'none'">
-        <label class="volume-label">Volume</label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          [value]="volume"
-          (input)="onVolumeChange($event)"
-          class="volume-slider"
-        />
-      </div>
-
       <p class="current-value">Selected: {{ userPreferences.backgroundMusic }}</p>
     </div>
 

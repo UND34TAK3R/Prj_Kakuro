@@ -25,7 +25,6 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
-
               }
             ],
             "styles": [
@@ -90,7 +89,8 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
