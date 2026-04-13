@@ -11,8 +11,6 @@ export class MusicService {
   };
 
   playMusic(track: string): void {
-    console.log('playMusic called with:', track);  // ← add this
-    console.log('audio src will be:', this.musicFiles[track]);  // ← add this
     this.stopMusic();  // always stop current before starting new
     if (track === 'none' || !this.musicFiles[track]) {
       return;
