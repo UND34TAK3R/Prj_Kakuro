@@ -1,7 +1,21 @@
 import { Injectable, inject } from "@angular/core";
-import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc, setDoc, getDocs, where, query } from "@angular/fire/firestore";
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  setDoc,
+  getDocs,
+  where,
+  query,
+  getDoc
+} from "@angular/fire/firestore";
 import { Auth, signInWithEmailAndPassword, signOut, user, createUserWithEmailAndPassword, UserCredential, getAuth } from '@angular/fire/auth';
-import { Observable, switchMap, of } from 'rxjs';
+import {Observable, switchMap, of, queue} from 'rxjs';
 import { getDatabase, ref, onDisconnect, set, serverTimestamp, onValue, remove } from "firebase/database";
 import { UserPreferences } from '../account-preferences/account-preferences.component';
 // Revision history:
@@ -9,6 +23,7 @@ import { UserPreferences } from '../account-preferences/account-preferences.comp
 // DEVELOPER          DATE                            COMMENTS
 // Derrick Mangari 2026-03-14       Created the FirebaseService to handle all interactions with Firebase Auth and Firestore, including user registration, login, logout, and CRUD operations for user data. Also implemented error handling for authentication methods.
 // Derrick Mangari 2026-03-15       Created functionialites for SocialHub (send Friend requests, Accept/Deny a friend Request, Retrieve Friend List, Listen to Friend Requests and Friends Status)
+// Justin P.       2026-04-12       Added functionalities required for matchmaking / multiplayer play
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
@@ -86,6 +101,12 @@ export class FirebaseService {
     getUser(id: string): Observable<any> {
         const ref = doc(this.firestore, `users/${id}`);
         return docData(ref, { idField: 'id' });
+    }
+
+    async getUserSnapshot(id: String): Promise<any> {
+      const ref = doc(this.firestore, `users/${id}`);
+      const snap = await getDoc(ref);
+      return snap.exists() ? { id: snap.id, ...snap.data() } : null;
     }
 
     addUser(user: any): Promise<any> {
