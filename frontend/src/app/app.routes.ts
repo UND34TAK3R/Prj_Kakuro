@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { KakuroLocalComponent } from './kakuro-local/kakuro-local.component';
-import { GameConfigurationComponent } from './homepage/gameconfiguraton.component';
+import { GameConfigurationComponent } from './gameconfiguration/gameconfiguraton.component';
 import { SocialHubComponent } from './social/social.component';
 import { RankingComponent } from './ranking/ranking.component';
 import {MatchmakingComponent} from './matchmaking/matchmaking.component';
