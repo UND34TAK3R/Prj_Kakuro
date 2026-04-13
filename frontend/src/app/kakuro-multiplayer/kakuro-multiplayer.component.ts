@@ -34,6 +34,7 @@ interface Cell {
   isFixed?: boolean;
   isBlack?: boolean;
   isClue?: boolean;
+  _prev?: number;
 }
 
 @Component({
@@ -79,6 +80,11 @@ export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
 
   // ─── Puzzle engine (shared with KakuroLocalComponent) ────────
   private currentSolution: Cell[][] = [];
+
+  // ─── Undo (backtrack) stack ───────────────────────────────────
+  // Each entry stores {row, col, previousValue} for one cell change
+  private undoStack: Array<{ row: number; col: number; previousValue: number | undefined }> = [];
+  canUndo = false;
 
   // =========================================================
   ngOnInit(): void {
@@ -291,14 +297,27 @@ export class KakuroMultiplayerComponent implements OnInit, OnDestroy {
   }
 
   // ─── Cell interaction ────────────────────────────────────────
-  onCellChange(cell: Cell): void {
+  onCellChange(cell: Cell, previousValue?: number): void {
     if (cell.type !== 'playable' || cell.isFixed || this.sessionState !== 'active') return;
     if (cell.value !== undefined) {
       const v = Number(cell.value);
       if (isNaN(v) || v < 1 || v > 9) { cell.value = undefined; return; }
       cell.value = v;
     }
+    // Push previous state onto the undo stack
+    this.undoStack.push({ row: cell.row, col: cell.col, previousValue });
+    this.canUndo = this.undoStack.length > 0;
     this.checkCompletion();
+  }
+
+  // Backtrack (undo) the last cell change
+  undoLastMove(): void {
+    if (!this.canUndo || this.sessionState !== 'active') return;
+    const last = this.undoStack.pop();
+    if (!last) return;
+    const cell = this.grid[last.row][last.col];
+    if (cell) cell.value = last.previousValue;
+    this.canUndo = this.undoStack.length > 0;
   }
 
   isCellCorrect(cell: Cell): boolean {

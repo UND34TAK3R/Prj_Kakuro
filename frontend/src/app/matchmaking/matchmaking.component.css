@@ -95,3 +95,24 @@ spin {
 .cancel-btn:hover {
   background:#333;
 }
+
+.mm-countdown {
+  font-size: 1rem;
+  color: #555;
+  margin-top: .5rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.countdown-number {
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2e7d32;
+  animation: pulse 1s ease-in-out infinite;
+  min-width: 1.5rem;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.2); opacity: .7; }
+}

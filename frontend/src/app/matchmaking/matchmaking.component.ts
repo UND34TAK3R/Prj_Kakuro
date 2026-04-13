@@ -23,6 +23,8 @@ export class MatchmakingComponent implements OnInit, OnDestroy {
   searching = false;
   matchmakingInProgress = false // based on OpponentFound
   error = "";
+  matchFoundCountdown: number | null = null;
+  private countdownInterval?: any;
 
   private matchUnsubscribe?: () => void;
   private pollInterval?: any;
@@ -61,8 +63,8 @@ export class MatchmakingComponent implements OnInit, OnDestroy {
           this.currentUserId, opponentId, this.gameMode, this.gridSize
         );
 
-        // Navigate to multiplayer game
-        await this.router.navigate(["/multiplayerGame"], { queryParams: { sessionId }});
+        // Show countdown before navigating to multiplayer game
+        this.startMatchFoundCountdown(sessionId);
       } else {
         await this.firebase.joinMatchmakingQueue(
           this.currentUserId, this.gameMode, this.gridSize
@@ -79,12 +81,24 @@ export class MatchmakingComponent implements OnInit, OnDestroy {
 
   private listenForMatch(): void {
     this.matchUnsubscribe = this.firebase.listenForMatch(this.currentUserId, (sessionId) => {
-        if (sessionId) {
-          this.opponentFound = true;
-          this.matchmakingInProgress = false;
-          this.router.navigate(["/multiplayerGame"], { queryParams: { sessionId } });
-        }
-      });
+      if (sessionId) {
+        this.opponentFound = true;
+        this.matchmakingInProgress = false;
+        this.startMatchFoundCountdown(sessionId);
+      }
+    });
+  }
+
+  private startMatchFoundCountdown(sessionId: string): void {
+    this.matchFoundCountdown = 3;
+    this.countdownInterval = setInterval(() => {
+      if (this.matchFoundCountdown !== null && this.matchFoundCountdown > 1) {
+        this.matchFoundCountdown--;
+      } else {
+        clearInterval(this.countdownInterval);
+        this.router.navigate(["/multiplayerGame"], { queryParams: { sessionId } });
+      }
+    }, 1000);
   }
 
   async cancelSearch(): Promise<void> {
@@ -95,6 +109,7 @@ export class MatchmakingComponent implements OnInit, OnDestroy {
 
   private cleanup(): void {
     if (this.matchUnsubscribe) this.matchUnsubscribe();
-    if (this.pollInterval) clearInterval(this.pollInterval)
+    if (this.pollInterval) clearInterval(this.pollInterval);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
   }
 }

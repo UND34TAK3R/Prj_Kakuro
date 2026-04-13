@@ -55,6 +55,14 @@
             </button>
 
             <button
+              class="ctrl-btn undo"
+              *ngIf="sessionState === 'active'"
+              [disabled]="!canUndo"
+              (click)="undoLastMove()">
+              ↩ Undo Move
+            </button>
+
+            <button
               class="ctrl-btn resume"
               *ngIf="sessionState === 'paused'"
               (click)="resumeGame()">
@@ -141,7 +149,8 @@
                     *ngIf="!cell.isBlack"
                     type="number" min="1" max="9"
                     [(ngModel)]="cell.value"
-                    (ngModelChange)="onCellChange(cell)"
+                    (focus)="cell['_prev'] = cell.value"
+                    (ngModelChange)="onCellChange(cell, cell['_prev'])"
                     [disabled]="sessionState !== 'active' || isGameComplete || (cell.isFixed ?? false)"
                     class="cell-input"
                     [class.fixed-cell]="cell.isFixed">

@@ -7,6 +7,45 @@
       <p class="auth-subtitle">Manage your friends and connections</p>
     </div>
 
+    <!-- Duel Invite Notifications -->
+    <div class="game-container notifications-card" *ngIf="duelInvites.length > 0">
+      <div class="card-label">
+        <span class="notif-bell">🔔</span>
+        Notifications
+        <span class="count-pill orange">{{ duelInvites.length }}</span>
+      </div>
+      <hr class="divider" />
+      <ul class="friends-list">
+        <li class="friend-row notif-row" *ngFor="let invite of duelInvites">
+          <div class="notif-icon">⚔️</div>
+          <div class="notif-body">
+            <span class="notif-text">
+              <strong>{{ invite.senderUsername }}</strong> challenged you to a duel
+            </span>
+            <span class="notif-meta">{{ invite.grid }} · {{ invite.gameMode }}</span>
+          </div>
+          <div class="req-actions">
+            <button
+              class="req-btn accept"
+              [disabled]="invite.accepting || invite.refusing"
+              (click)="acceptDuel(invite)"
+              title="Accept Duel">
+              <svg *ngIf="!invite.accepting" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span *ngIf="invite.accepting" class="mini-spin"></span>
+            </button>
+            <button
+              class="req-btn decline"
+              [disabled]="invite.accepting || invite.refusing"
+              (click)="refuseDuel(invite)"
+              title="Decline Duel">
+              <svg *ngIf="!invite.refusing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span *ngIf="invite.refusing" class="mini-spin"></span>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <!-- Friends Grid: Online + Offline + Requests -->
     <div class="hub-grid">
 
@@ -103,8 +142,7 @@
               class="add-btn"
               [class.sent]="user.requestSent"
               [disabled]="user.requestSent"
-              (click)="sendRequest(user)"
-            >
+              (click)="sendRequest(user)">
               <span *ngIf="!user.requestSent">+ Add</span>
               <span *ngIf="user.requestSent">✓ Sent</span>
             </button>

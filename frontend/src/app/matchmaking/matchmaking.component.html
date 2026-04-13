@@ -9,7 +9,7 @@
     <!-- Initial search -->
     <div *ngIf="searching" class = "mm-status">
       <div class = "spinner"> </div>
-        <p> Searching for available opponents.. </p>
+      <p> Searching for available opponents.. </p>
     </div>
 
     <!-- Matchmaking in process -->
@@ -21,7 +21,10 @@
 
     <!-- Opponent found -->
     <div *ngIf="opponentFound" class = "mm-status success">
-      <p class = "match-found"> Match found! Starting game.. </p>
+      <p class = "match-found"> Match found! </p>
+      <p class = "mm-countdown" *ngIf="matchFoundCountdown !== null">
+        Starting in <span class="countdown-number">{{ matchFoundCountdown }}</span>…
+      </p>
     </div>
 
     <!-- Display errors, if any -->

@@ -285,3 +285,17 @@
   .cell-input { font-size: 16px; }
   .clue-down, .clue-across { font-size: .6rem; }
 }
+
+/* Undo button */
+.ctrl-btn.undo {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.ctrl-btn.undo:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+.ctrl-btn.undo:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
